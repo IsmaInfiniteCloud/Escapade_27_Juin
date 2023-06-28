@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const argon2 = require("argon2");
-
+//essaie github
 exports.signUp = async (req, res) => {
   const { email, motDePasse, prenom, nom } = req.body;
 
