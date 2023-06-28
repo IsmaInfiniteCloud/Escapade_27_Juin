@@ -18,10 +18,10 @@ router.post('/', reservationController.createReservation);
 router.delete('/:id', reservationController.deleteReservation);
 
 // Route update
-//router.put('/:id', reservationController.createReservation);
+router.put('/:id', reservationController.updateReservation);
 
 // Route details
-//router.get('/:id', reservationController.createReservation);
+router.get('/:id', reservationController.getReservation);
 
 
 module.exports = router;
