@@ -16,5 +16,6 @@ router.put('/:id', hebergementController.updateHebergement);
 // Route details
 router.get('/:id', hebergementController.getHebergement);
 
+//Get all-hebergement
 
 module.exports = router;

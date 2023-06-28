@@ -7,6 +7,11 @@ const User = require("../models/User");
 // Create Hebergement linked to user
 exports.createHebergement = async (req, res) => {
   try {
+    if(!req.session.user){
+      return res.status(401).json({ message: "Veuillez vous connecter"})
+    }
+    //stocker le id de la session/user
+    const userId = req.session.user._id
     const user = await User.findById(req.body.userId);
 
     if (!user) {

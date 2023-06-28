@@ -4,6 +4,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Available Scripts
 
+Les npm ne semble pas suivre lors du premier pull sur gitHub donc:
+npm install express
+npm install express-session
+npm install mongoose
+
 Pour tester l'app il faudra 2 terminaux differents
 Pour le serveur : 'nodemon server.js'
 pour react : 'npm run start'

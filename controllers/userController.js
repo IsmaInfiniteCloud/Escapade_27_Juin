@@ -60,3 +60,7 @@ exports.logout = (req, res) => {
   res.status(200).json({ message: "Déconnexion réussie" });
   //Destroy session
 };
+
+//Update User/gerer profil
+
+

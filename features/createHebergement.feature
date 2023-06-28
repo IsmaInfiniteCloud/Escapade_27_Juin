@@ -13,4 +13,4 @@ Feature: Create Hebergement
 
        Examples:
            | titre | description | imageSrc | categorie | nbChambres | nbSalleBains | nbPersonneMax | localisation | prix |
-           | appartement de luxe  | merveilleux appartement  | http://photo.png  | Appartement | 4 | 3 | 8 | San Jose | 2100
+           | appartement de luxe  | merveilleux appartement  | http://photo.png  | Appartement | 4 | 3 | 8 | San Jose | 2100 |
