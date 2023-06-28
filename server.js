@@ -1,13 +1,29 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const session = require('express-session'); // Import the session
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 const hebergementRoutes = require("./routes/hebergementRoutes");
 
 const app = express();
 const port = 5000;
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000', // replace with the domain of your client app
+    credentials: true,
+  })
+);
+
 app.use(express.json());
-app.use(cors());
+
+// Add the session middleware
+app.use(session({
+    secret: 'some secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: { httpOnly: true, secure: false, maxAge: 1000 * 60 * 60 * 24 } // 1 day
+}));
 
 // Connexion à la base de données MongoDB avec Mongoose
 mongoose
