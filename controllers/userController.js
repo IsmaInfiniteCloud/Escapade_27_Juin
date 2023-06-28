@@ -1,6 +1,5 @@
 const User = require("../models/User");
 const argon2 = require("argon2");
-//essaie github
 exports.signUp = async (req, res) => {
   const { email, motDePasse, prenom, nom } = req.body;
 
@@ -33,8 +32,8 @@ exports.signUp = async (req, res) => {
 exports.signIn = async (req, res) => {
   const { email, motDePasse } = req.body;
 
-  console.log("Received email:", email); // Debug line
-  console.log("Received motDePasse:", motDePasse); // Debug line
+  //console.log("Received email:", email); // Debug line
+  //console.log("Received motDePasse:", motDePasse); // Debug line
 
   // Cherche lidentifiant dans la DB (email)
   const user = await User.findOne({ email });
@@ -59,4 +58,5 @@ exports.signIn = async (req, res) => {
 
 exports.logout = (req, res) => {
   res.status(200).json({ message: "Déconnexion réussie" });
+  //Destroy session
 };
