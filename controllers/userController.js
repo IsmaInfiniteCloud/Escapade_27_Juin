@@ -43,6 +43,7 @@ exports.signIn = async (req, res) => {
     return res.status(401).json({ error: "Cet identifiant est inexistant " });
   }
 
+  req.session.user = user;
   // Vérification du motDePasse/encryption sur la DB
   const isMatch = await argon2.verify(user.motDePasse, motDePasse);
 
@@ -53,7 +54,7 @@ exports.signIn = async (req, res) => {
   // Succes
 
   res.status(200).json({ message: "Bienvenue", user });
-  // console.log(req.session.user);
+  console.log(req.session.user);
 };
 
 exports.logout = (req, res) => {
