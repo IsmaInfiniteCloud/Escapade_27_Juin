@@ -4,6 +4,7 @@ const session = require('express-session'); // Import the session
 const userRoutes = require("./routes/userRoutes");
 const cors = require("cors");
 const hebergementRoutes = require("./routes/hebergementRoutes");
+const reservationRoutes = require('./routes/reservationRoutes');
 
 const app = express();
 const port = 5000;
@@ -48,6 +49,7 @@ app.get("/", (req, res) => {
 
 app.use("/api/hebergement", hebergementRoutes);
 app.use("/api/users", userRoutes);
+app.use('/api/reservation', reservationRoutes);
 
 // Démarrage du serveur
 app.listen(port, () => {
