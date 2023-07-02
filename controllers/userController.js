@@ -57,8 +57,12 @@ exports.signIn = async (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  res.status(200).json({ message: "Déconnexion réussie" });
-  //Destroy session
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Une erreur s'est produite lors de la déconnexion" });
+    }
+    res.status(200).json({ message: "Déconnexion réussie" });
+  });
 };
 
 //Update User/gerer profil
