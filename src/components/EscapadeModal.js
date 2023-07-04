@@ -10,8 +10,6 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { getCoordinates } from "../utils/geocoding.js";
 
-
-
 function EscapadeModal({
   isOpen,
   onClose,
@@ -44,7 +42,6 @@ function EscapadeModal({
   });
   const [isEscapadeFormValid, setIsEscapadeFormValid] = useState(false);
   const [escapadeFormErrors, setEscapadeFormErrors] = useState({});
-
 
   const resetForm = () => {
     setEscapadeFormValues({
@@ -183,8 +180,11 @@ function EscapadeModal({
         nbSallesDeBain: parseInt(escapadeFormValues.nbSallesDeBain),
         nbPersonnesMax: parseInt(escapadeFormValues.nbPersonnesMax),
         animalAccepte: escapadeFormValues.animalAccepte === "true",
+        photos: selectedPhotos,
+        date_bloque: blockedDates,
         prix: parseFloat(escapadeFormValues.prix),
-        location: { // Create the location object
+        location: {
+          // Create the location object
           type: "Point", // Set the type property
           coordinates: [coordinates.lat, coordinates.lng], // Directly set the coordinates property to the returned coordinates array
         },
@@ -198,8 +198,6 @@ function EscapadeModal({
 
         .then((response) => {
           console.log(escapadeData);
-
-
 
           // Traitement de la réponse
           setEscapadeFormValues({
@@ -219,11 +217,19 @@ function EscapadeModal({
             photos: selectedPhotos,
             prix: "",
           });
-          setIsEscapadeOpen(false);
+          setSelectedFiles([]);
+          setSelectedPhotos([]);
+          setEscapadeFormErrors({});
+          onClose();
+          //setIsEscapadeOpen(false);
         })
         .catch((error) => {
           // Traitement de l'erreur en cas d'échec de la soumission
-          console.error("Erreur lors de la soumission du formulaire :", error, escapadeFormValues);
+          console.error(
+            "Erreur lors de la soumission du formulaire :",
+            error,
+            escapadeFormValues
+          );
         });
     } else {
       setEscapadeFormErrors(errors);
@@ -276,10 +282,8 @@ function EscapadeModal({
           {" "}
           <form
             onSubmit={handleEscapadeSubmit}
-
             className="container mx-auto  px-5"
           >
-
             {/* <h2 className="mb-4 ">Créer une Escapade</h2> */}
             {/* Escapade form fields */}
             <div className="form-group">
@@ -287,8 +291,9 @@ function EscapadeModal({
               <input
                 type="text"
                 id="titre"
-                className={`form-control  mb-2 ${escapadeFormErrors.titre ? "is-invalid" : ""
-                  }`}
+                className={`form-control  mb-2 ${
+                  escapadeFormErrors.titre ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez le titre de votre escapade"
                 value={escapadeFormValues.titre}
                 onChange={(e) =>
@@ -309,8 +314,9 @@ function EscapadeModal({
               <label htmlFor="description">Description</label>
               <textarea
                 id="description"
-                className={`form-control mb-2 ${escapadeFormErrors.description ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.description ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez la description de votre escapade"
                 value={escapadeFormValues.description}
                 onChange={(e) =>
@@ -342,8 +348,9 @@ function EscapadeModal({
               <input
                 type="text"
                 id="adresse"
-                className={`form-control mb-2 ${escapadeFormErrors.adresse ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.adresse ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez l'adresse de votre escapade"
                 value={escapadeFormValues.adresse}
                 onChange={(e) =>
@@ -366,8 +373,9 @@ function EscapadeModal({
               <input
                 type="text"
                 id="ville"
-                className={`form-control mb-2 ${escapadeFormErrors.ville ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.ville ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez la ville de votre escapade"
                 value={escapadeFormValues.ville}
                 onChange={(e) =>
@@ -390,8 +398,9 @@ function EscapadeModal({
               <input
                 type="text"
                 id="codepostal"
-                className={`form-control mb-2 ${escapadeFormErrors.codepostal ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.codepostal ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez le code postal de votre escapade"
                 value={escapadeFormValues.codepostal}
                 onChange={(e) =>
@@ -414,8 +423,9 @@ function EscapadeModal({
               <input
                 type="text"
                 id="pays"
-                className={`form-control mb-2 ${escapadeFormErrors.pays ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.pays ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez le pays de votre escapade"
                 value={escapadeFormValues.pays}
                 onChange={(e) =>
@@ -438,8 +448,9 @@ function EscapadeModal({
               <input
                 type="number"
                 id="nbChambres"
-                className={`form-control mb-2 ${escapadeFormErrors.nbChambres ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.nbChambres ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez le nombre de chambres de votre escapade"
                 value={escapadeFormValues.nbChambres}
                 onChange={(e) =>
@@ -462,8 +473,9 @@ function EscapadeModal({
               <input
                 type="number"
                 id="nbSallesDeBain"
-                className={`form-control mb-2 ${escapadeFormErrors.nbSallesDeBain ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.nbSallesDeBain ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez le nombre de salles de bain de votre escapade"
                 value={escapadeFormValues.nbSallesDeBain}
                 onChange={(e) =>
@@ -488,8 +500,9 @@ function EscapadeModal({
               <input
                 type="number"
                 id="nbPersonnesMax"
-                className={`form-control mb-2 ${escapadeFormErrors.nbPersonnesMax ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.nbPersonnesMax ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez le nombre de personnes maximum de votre escapade"
                 value={escapadeFormValues.nbPersonnesMax}
                 onChange={(e) =>
@@ -525,8 +538,9 @@ function EscapadeModal({
               <input
                 type="number"
                 id="prix"
-                className={`form-control mb-2 ${escapadeFormErrors.prix ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.prix ? "is-invalid" : ""
+                }`}
                 placeholder="Entrez le prix par jour de votre escapade"
                 value={escapadeFormValues.prix}
                 onChange={(e) =>
@@ -623,10 +637,11 @@ function EscapadeModal({
                 type="file"
                 id="photos
 "
-                className={`form-control mb-2 ${escapadeFormErrors.photos ? "is-invalid" : ""
-                  }`}
+                className={`form-control mb-2 ${
+                  escapadeFormErrors.photos ? "is-invalid" : ""
+                }`}
                 placeholder="Choisissez les photos de votre escapade"
-                value={escapadeFormValues.photos}
+                //value={escapadeFormValues.photos}
                 onChange={(e) => handleFileInputChange(e)}
                 // onChange={(e) =>
                 //   setEscapadeFormValues({

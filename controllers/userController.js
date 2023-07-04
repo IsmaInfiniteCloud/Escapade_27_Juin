@@ -56,8 +56,8 @@ exports.signIn = async (req, res) => {
 
   res.status(200).json({ message: "Bienvenue", user });
   console.log(req.session.user._id);
-  userId = req.session.user._id;
-  console.log(userId);
+  // userId = req.session.user._id;
+  // console.log(userId);
 };
 
 exports.logout = (req, res) => {

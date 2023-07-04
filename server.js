@@ -6,8 +6,13 @@ const cors = require("cors");
 const hebergementRoutes = require("./routes/hebergementRoutes");
 const reservationRoutes = require("./routes/reservationRoutes");
 
+const bodyParser = require("body-parser");
+
 const app = express();
 const port = 5000;
+
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 app.use(
   cors({
@@ -32,7 +37,7 @@ app.use(
 mongoose
   .connect(
     // "mongodb+srv://ameen:gr007,,@cluster0.rztkifm.mongodb.net/Escapade",
-"mongodb+srv://julesmartin63:Michelle0987@cluster0.tim76gj.mongodb.net/Escapade",
+    "mongodb+srv://julesmartin63:Michelle0987@cluster0.tim76gj.mongodb.net/Escapade",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
