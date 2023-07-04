@@ -7,17 +7,18 @@ const User = require("../models/User");
 // Create Hebergement linked to user
 exports.createHebergement = async (req, res) => {
   try {
-    if(!req.session.user){
-      return res.status(401).json({ message: "Veuillez vous connecter"})
+    if (!req.session.user) {
+      return res.status(401).json({ message: "Veuillez vous connecter" });
     }
     //stocker le id de la session/user
-    const userId = req.session.user._id
+    //const userId = req.session.user._id;
     const user = await User.findById(req.body.userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Créer un nouvel hebergement
     const newHebergement = new Hebergement({
       //attend tous les champs possibles et ajoute userId
       ...req.body,

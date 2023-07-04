@@ -17,6 +17,8 @@ function Header() {
   const [isEscapadeOpen, setIsEscapadeOpen] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   const [PopupToShow, setPopupToShow] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [isUserId, setIsUserId] = useState(null);
 
   const handleInscriptionClick = (event) => {
     event.preventDefault();
@@ -64,10 +66,12 @@ function Header() {
     setIsEscapadeOpen(true);
   };
 
-  const handleSuccessfulLogin = () => {
+  const handleSuccessfulLogin = (userId) => {
     setIsUserLoggedIn(true);
-    alert("Connexion réussie. \n\nBienvenue sur Escapade!");
+    setIsUserId(userId);
+    alert("Connexion réussie. \n\nBienvenue sur Escapade!   userId: " + userId);
     // console.log("Connexion réussie");
+    console.log(userId);
   };
 
   const handleLogout = () => {
@@ -225,6 +229,7 @@ function Header() {
         onClose={() => setIsEscapadeOpen(false)}
         onGoToConnexion={openConnexionModal}
         isUserLoggedIn={isUserLoggedIn}
+        isUserId={isUserId}
       />
     </div>
   );

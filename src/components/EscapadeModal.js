@@ -8,8 +8,15 @@ import Modal from "react-modal";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { getCoordinates } from "../utils/geocoding.js";
 
-function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
+function EscapadeModal({
+  isOpen,
+  onClose,
+  onGotoConnexion,
+  isUserLoggedIn,
+  userId,
+}) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
@@ -18,6 +25,7 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [escapadeFormValues, setEscapadeFormValues] = useState({
+    idUser: "",
     titre: "",
     description: "",
     categorie: "",
@@ -34,6 +42,25 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
   });
   const [isEscapadeFormValid, setIsEscapadeFormValid] = useState(false);
   const [escapadeFormErrors, setEscapadeFormErrors] = useState({});
+
+  const resetForm = () => {
+    setEscapadeFormValues({
+      titre: "",
+      description: "",
+      categorie: "",
+      adresse: "",
+      ville: "",
+      codepostal: "",
+      pays: "",
+      nbChambres: "",
+      nbSallesDeBain: "",
+      nbPersonnesMax: "",
+      animaux: "",
+      photos: "",
+      prix: "",
+    });
+    setEscapadeFormErrors({});
+  };
 
   const validateEscapadeForm = () => {
     const {
@@ -112,7 +139,9 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
       errors.nbPersonnesMax = "Veuillez entrer un nombre positif";
     }
 
-    if (escapadeFormValues.photos.length === 0) {
+    // si aucune photo n'a été sélectionnée
+
+    if (selectedPhotos.length === 0) {
       errors.photos = "Vous devez ajouter au moins une photo";
     }
 
@@ -123,20 +152,35 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
   console.log("EscapadeModal onClose:", onClose);
   console.log("EscapadeModal onGotoConnexion:", onGotoConnexion);
   console.log("Utilissateur connecté:", isUserLoggedIn);
+  console.log("Id utilisateur:", userId);
 
-  const handleEscapadeSubmit = (event) => {
+  const handleEscapadeSubmit = async (event) => {
     event.preventDefault();
+
+    const coordinates = await getCoordinates(
+      escapadeFormValues.adresse,
+      escapadeFormValues.ville,
+      escapadeFormValues.codepostal,
+      escapadeFormValues.pays
+    );
+
+    console.log("Coordonnées:", coordinates);
+
+    console.log("Dates bloquées : ", blockedDates);
+    console.log("Photos sélectionnées : ", selectedPhotos);
 
     const errors = validateEscapadeForm();
 
     if (Object.keys(errors).length === 0) {
       // Soumission du formulaire
       axios
-        .post("/api/hebergement", escapadeFormValues)
+        .post("/api/hebergement/", escapadeFormValues)
         .then((response) => {
           console.log("Réponse du serveur :", response.data.message);
+
           // Traitement de la réponse
           setEscapadeFormValues({
+            idUser: userId,
             titre: "",
             description: "",
             categorie: "",
@@ -148,8 +192,8 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
             nbSallesDeBain: "",
             nbPersonnesMax: "",
             animaux: "",
-            date_bloque: [],
-            photos: [],
+            date_bloque: blockedDates,
+            photos: selectedPhotos,
             prix: "",
           });
           setIsEscapadeOpen(false);
@@ -188,7 +232,10 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
         className="custom-modal-dialog modal-dialog-scrollable border border-dark"
         // className="custom-modal"
         isOpen={isOpen}
-        onRequestClose={onClose}
+        onRequestClose={() => {
+          onClose();
+          resetForm();
+        }}
       >
         <div
           className="modal-header"
