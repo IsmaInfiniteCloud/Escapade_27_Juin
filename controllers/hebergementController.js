@@ -7,26 +7,25 @@ const User = require("../models/User");
 // Create Hebergement linked to user
 exports.createHebergement = async (req, res) => {
   try {
-    if(!req.session.user){
-      return res.status(401).json({ message: "Veuillez vous connecter"})
-    }
-    //stocker le id de la session/user
-    const userId = req.session.user._id
-    const user = await User.findById(req.body.userId);
+    // Get user Id from the request body
+    const userId = req.body.idUser;
+
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
+    // Create a new 'hebergement' excluding 'idUser' from request body
+    const { idUser, ...hebergementData } = req.body;
     const newHebergement = new Hebergement({
-      //attend tous les champs possibles et ajoute userId
-      ...req.body,
-      user: user._id,
+      ...hebergementData,
+      userId: userId,
     });
 
     const savedHebergement = await newHebergement.save();
 
-    // Update les offres hebergements du user
+    // Update the 'hebergements' of the user
     user.hebergements.push(savedHebergement._id);
     await user.save();
 

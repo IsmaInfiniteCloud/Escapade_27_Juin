@@ -5,7 +5,8 @@ exports.signUp = async (req, res) => {
 
   // Check si identifiant deja utilise
   let user = await User.findOne({ email });
-  console.log(req.body);
+
+  //console.log(req.body);
 
   if (user) {
     return res.status(400).json({ message: "Identifiant déjà utilisé" });
@@ -43,6 +44,7 @@ exports.signIn = async (req, res) => {
   }
 
   req.session.user = user;
+  console.log(user);
   // Vérification du motDePasse/encryption sur la DB
   const isMatch = await argon2.verify(user.motDePasse, motDePasse);
 
@@ -53,13 +55,17 @@ exports.signIn = async (req, res) => {
   // Succes
 
   res.status(200).json({ message: "Bienvenue", user });
-  console.log(req.session.user);
+  console.log(req.session.user._id);
+  // userId = req.session.user._id;
+  // console.log(userId);
 };
 
 exports.logout = (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.status(500).json({ error: "Une erreur s'est produite lors de la déconnexion" });
+      return res
+        .status(500)
+        .json({ error: "Une erreur s'est produite lors de la déconnexion" });
     }
     res.status(200).json({ message: "Déconnexion réussie" });
   });
@@ -115,5 +121,3 @@ exports.patchEmail = async (req, res) => {
 
 
 //Update User/gerer profil
-
-

@@ -23,6 +23,17 @@ function InscriptionModal({ isOpen, onClose, onGoToConnexion }) {
   const [isFormValid, setIsFormValid] = useState(false);
   const [formErrors, setFormErrors] = useState({});
 
+  const resetForm = () => {
+    setFormValues({
+      prenom: "",
+      nom: "",
+      email: "",
+      motDePasse: "",
+      repete_passe: "",
+    });
+    setFormErrors({});
+  };
+
   const validateForm = () => {
     const errors = {};
     // Vérification du mot de passe en testant la conformité à la passwordRegex
@@ -63,6 +74,8 @@ function InscriptionModal({ isOpen, onClose, onGoToConnexion }) {
     event.preventDefault();
     // Ferme le modal d'inscription et ouvre le modal de connexion.
     onClose();
+    //initialiser le formulaire
+    resetForm();
     onGoToConnexion();
   };
 
@@ -81,9 +94,18 @@ function InscriptionModal({ isOpen, onClose, onGoToConnexion }) {
           console.log("Réponse du serveur :", response.data);
 
           // Gestion de la réponse de l'API.
-          if (response.data.status === "success") {
+          if (response.status === 201) {
+            //réinitialisation du formulaire
+            setFormValues({
+              prenom: "",
+              nom: "",
+              email: "",
+              motDePasse: "",
+              repete_passe: "",
+            });
             // Si l'inscription est réussie, fermer le modal.
             onClose();
+            onGoToConnexion();
           } else {
             // Si l'API renvoie une erreur, la gérer ici.
             // Par exemple, définir une erreur de formulaire générique à afficher.
@@ -107,7 +129,10 @@ function InscriptionModal({ isOpen, onClose, onGoToConnexion }) {
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onClose}
+      onRequestClose={() => {
+        onClose();
+        resetForm();
+      }}
       className="custom-modal border border-dark"
     >
       <form onSubmit={handleSubmit} className="container w-75 px-0">

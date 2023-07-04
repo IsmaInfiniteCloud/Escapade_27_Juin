@@ -8,8 +8,15 @@ import Modal from "react-modal";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { getCoordinates } from "../utils/geocoding.js";
 
-function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
+function EscapadeModal({
+  isOpen,
+  onClose,
+  onGotoConnexion,
+  isUserLoggedIn,
+  isUserId,
+}) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
@@ -18,6 +25,7 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [escapadeFormValues, setEscapadeFormValues] = useState({
+    idUser: isUserId,
     titre: "",
     description: "",
     categorie: "",
@@ -28,12 +36,31 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
     nbChambres: "",
     nbSallesDeBain: "",
     nbPersonnesMax: "",
-    animaux: "",
+    animalAccepte: "",
     photos: "",
     prix: "",
   });
   const [isEscapadeFormValid, setIsEscapadeFormValid] = useState(false);
   const [escapadeFormErrors, setEscapadeFormErrors] = useState({});
+
+  const resetForm = () => {
+    setEscapadeFormValues({
+      titre: "",
+      description: "",
+      categorie: "",
+      adresse: "",
+      ville: "",
+      codepostal: "",
+      pays: "",
+      nbChambres: "",
+      nbSallesDeBain: "",
+      nbPersonnesMax: "",
+      animalAccepte: "",
+      photos: "",
+      prix: "",
+    });
+    setEscapadeFormErrors({});
+  };
 
   const validateEscapadeForm = () => {
     const {
@@ -112,31 +139,69 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
       errors.nbPersonnesMax = "Veuillez entrer un nombre positif";
     }
 
-    if (escapadeFormValues.photos.length === 0) {
+    // si aucune photo n'a été sélectionnée
+
+    if (selectedPhotos.length === 0) {
       errors.photos = "Vous devez ajouter au moins une photo";
     }
 
     return errors;
   };
 
-  console.log("EscapadeModal isOpen:", isOpen);
-  console.log("EscapadeModal onClose:", onClose);
-  console.log("EscapadeModal onGotoConnexion:", onGotoConnexion);
-  console.log("Utilissateur connecté:", isUserLoggedIn);
+  // console.log("EscapadeModal isOpen:", isOpen);
+  // console.log("EscapadeModal onClose:", onClose);
+  // console.log("EscapadeModal onGotoConnexion:", onGotoConnexion);
+  // console.log("Utilissateur connecté:", isUserLoggedIn);
+  // console.log("Id utilisateur:", userId);
 
-  const handleEscapadeSubmit = (event) => {
+  const handleEscapadeSubmit = async (event) => {
     event.preventDefault();
+
+    const coordinates = await getCoordinates(
+      escapadeFormValues.adresse,
+      escapadeFormValues.ville,
+      escapadeFormValues.codepostal,
+      escapadeFormValues.pays
+    );
+
+    console.log("Coordonnées:", coordinates);
+
+    console.log("Dates bloquées : ", blockedDates);
+    console.log("Photos sélectionnées : ", selectedPhotos);
 
     const errors = validateEscapadeForm();
 
     if (Object.keys(errors).length === 0) {
+      // Convert form values to appropriate types
+      const escapadeData = {
+        ...escapadeFormValues,
+        idUser: isUserId,
+        nbChambres: parseInt(escapadeFormValues.nbChambres),
+        nbSallesDeBain: parseInt(escapadeFormValues.nbSallesDeBain),
+        nbPersonnesMax: parseInt(escapadeFormValues.nbPersonnesMax),
+        animalAccepte: escapadeFormValues.animalAccepte === "true",
+        photos: selectedPhotos,
+        date_bloque: blockedDates,
+        prix: parseFloat(escapadeFormValues.prix),
+        location: {
+          // Create the location object
+          type: "Point", // Set the type property
+          coordinates: [coordinates.lat, coordinates.lng], // Directly set the coordinates property to the returned coordinates array
+        },
+      };
       // Soumission du formulaire
+      console.log(isUserId);
+      console.log(escapadeFormValues);
+
       axios
-        .post("/api/hebergement", escapadeFormValues)
+        .post("/api/hebergement/", escapadeData, { withCredentials: true })
+
         .then((response) => {
-          console.log("Réponse du serveur :", response.data.message);
+          console.log(escapadeData);
+
           // Traitement de la réponse
           setEscapadeFormValues({
+            idUser: isUserId,
             titre: "",
             description: "",
             categorie: "",
@@ -147,16 +212,24 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
             nbChambres: "",
             nbSallesDeBain: "",
             nbPersonnesMax: "",
-            animaux: "",
-            date_bloque: [],
-            photos: [],
+            animalAccepte: "",
+            date_bloque: blockedDates,
+            photos: selectedPhotos,
             prix: "",
           });
-          setIsEscapadeOpen(false);
+          setSelectedFiles([]);
+          setSelectedPhotos([]);
+          setEscapadeFormErrors({});
+          onClose();
+          //setIsEscapadeOpen(false);
         })
         .catch((error) => {
           // Traitement de l'erreur en cas d'échec de la soumission
-          console.error("Erreur lors de la soumission du formulaire :", error);
+          console.error(
+            "Erreur lors de la soumission du formulaire :",
+            error,
+            escapadeFormValues
+          );
         });
     } else {
       setEscapadeFormErrors(errors);
@@ -188,7 +261,10 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
         className="custom-modal-dialog modal-dialog-scrollable border border-dark"
         // className="custom-modal"
         isOpen={isOpen}
-        onRequestClose={onClose}
+        onRequestClose={() => {
+          onClose();
+          resetForm();
+        }}
       >
         <div
           className="modal-header"
@@ -565,7 +641,7 @@ function EscapadeModal({ isOpen, onClose, onGotoConnexion, isUserLoggedIn }) {
                   escapadeFormErrors.photos ? "is-invalid" : ""
                 }`}
                 placeholder="Choisissez les photos de votre escapade"
-                value={escapadeFormValues.photos}
+                //value={escapadeFormValues.photos}
                 onChange={(e) => handleFileInputChange(e)}
                 // onChange={(e) =>
                 //   setEscapadeFormValues({

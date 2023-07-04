@@ -33,6 +33,14 @@ function ConnexionModal({
 
   var confirmation = sessionStorage.getItem("connexion");
 
+  const resetForm = () => {
+    setConnexionFormValues({
+      email: "",
+      motDePasse: "",
+    });
+    setConnexionFormErrors({});
+  };
+
   const validateConnexionForm = () => {
     const { email, motDePasse } = connexionFormValues;
 
@@ -61,6 +69,7 @@ function ConnexionModal({
   const handleInscriptionClick = (event) => {
     event.preventDefault();
     onClose();
+    resetForm();
     onGoToInscription();
   };
 
@@ -86,18 +95,18 @@ function ConnexionModal({
             sessionStorage.setItem("connexion", "confirmée");
             confirmation = sessionStorage.getItem("connexion");
             console.log(confirmation);
+
             // Réinitialisation des valeurs du formulaire de connexion
-            setConnexionFormValues({
-              email: "",
-              motDePasse: "",
-            });
+            resetForm();
             // on dit redirige l'utilisateur ver la popupToShow
             if (nextPopupToShow === "escapade") {
               onClose();
               onGoToEscapade();
             }
+            const userId = response.data.user._id;
             // on appelle la fonction onSuccessfulLogin pour mettre à jour le state de App.js
-            onSuccessfulLogin(response.data);
+            onSuccessfulLogin(userId);
+            console.log(userId);
           }
         })
         .catch((error) => {
@@ -116,7 +125,10 @@ function ConnexionModal({
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onClose}
+      onRequestClose={() => {
+        onClose();
+        resetForm();
+      }}
       className="custom-modal border border-dark"
     >
       <form onSubmit={handleConnexionSubmit} className="container w-75">
