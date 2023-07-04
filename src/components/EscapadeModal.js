@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { getCoordinates } from "../utils/geocoding.js";
 
 
+
 function EscapadeModal({
   isOpen,
   onClose,
@@ -26,7 +27,7 @@ function EscapadeModal({
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [escapadeFormValues, setEscapadeFormValues] = useState({
-    idUser: {isUserId},
+    idUser: isUserId,
     titre: "",
     description: "",
     categorie: "",
@@ -37,12 +38,13 @@ function EscapadeModal({
     nbChambres: "",
     nbSallesDeBain: "",
     nbPersonnesMax: "",
-    animaux: "",
+    animalAccepte: "",
     photos: "",
     prix: "",
   });
   const [isEscapadeFormValid, setIsEscapadeFormValid] = useState(false);
   const [escapadeFormErrors, setEscapadeFormErrors] = useState({});
+
 
   const resetForm = () => {
     setEscapadeFormValues({
@@ -56,7 +58,7 @@ function EscapadeModal({
       nbChambres: "",
       nbSallesDeBain: "",
       nbPersonnesMax: "",
-      animaux: "",
+      animalAccepte: "",
       photos: "",
       prix: "",
     });
@@ -173,20 +175,35 @@ function EscapadeModal({
     const errors = validateEscapadeForm();
 
     if (Object.keys(errors).length === 0) {
+      // Convert form values to appropriate types
+      const escapadeData = {
+        ...escapadeFormValues,
+        idUser: isUserId,
+        nbChambres: parseInt(escapadeFormValues.nbChambres),
+        nbSallesDeBain: parseInt(escapadeFormValues.nbSallesDeBain),
+        nbPersonnesMax: parseInt(escapadeFormValues.nbPersonnesMax),
+        animalAccepte: escapadeFormValues.animalAccepte === "true",
+        prix: parseFloat(escapadeFormValues.prix),
+        location: { // Create the location object
+          type: "Point", // Set the type property
+          coordinates: [coordinates.lat, coordinates.lng], // Directly set the coordinates property to the returned coordinates array
+        },
+      };
       // Soumission du formulaire
       console.log(isUserId);
+      console.log(escapadeFormValues);
+
       axios
-        .post("/api/hebergement/", escapadeFormValues)
+        .post("/api/hebergement/", escapadeData, { withCredentials: true })
 
         .then((response) => {
-          console.log(escapadeFormValues);
-          console.log("Réponse du serveur :", response.data.message);
-          console.log("ligne 183 Modal " + isUserId);
+          console.log(escapadeData);
+
 
 
           // Traitement de la réponse
           setEscapadeFormValues({
-            idUser: "",
+            idUser: isUserId,
             titre: "",
             description: "",
             categorie: "",
@@ -197,7 +214,7 @@ function EscapadeModal({
             nbChambres: "",
             nbSallesDeBain: "",
             nbPersonnesMax: "",
-            animaux: "",
+            animalAccepte: "",
             date_bloque: blockedDates,
             photos: selectedPhotos,
             prix: "",

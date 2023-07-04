@@ -27,7 +27,7 @@
 const mongoose = require("mongoose");
 
 const hebergementSchema = new mongoose.Schema({
-  _id: mongoose.Schema.Types.ObjectId,
+  idhebergement: mongoose.Schema.Types.ObjectId,
   nbSallesDeBain: Number,
   nbChambres: Number,
   nbPersonnesMax: Number,

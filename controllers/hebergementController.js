@@ -7,31 +7,25 @@ const User = require("../models/User");
 // Create Hebergement linked to user
 exports.createHebergement = async (req, res) => {
   try {
-    if (!req.session.user) {
-      return res.status(401).json({ message: "Veuillez vous connecter" });
+    // Get user Id from the request body
+    const userId = req.body.idUser;
 
-    }
-    //stocker le id de la session/user
-   // const userId = req.session.user._id;
-    //const user = await User.findById(req.body.userId);
+    const user = await User.findById(userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // Créer un nouvel hebergement
+    // Create a new 'hebergement' excluding 'idUser' from request body
+    const { idUser, ...hebergementData } = req.body;
     const newHebergement = new Hebergement({
-      //attend tous les champs possibles et ajoute userId
-      ...req.body,
-      userId: req.session.user._id,
-     
+      ...hebergementData,
+      userId: userId,
     });
-    console.log("ligne 30 " + userId);
-    console.log(req.session.user._id)
 
     const savedHebergement = await newHebergement.save();
 
-    // Update les offres hebergements du user
+    // Update the 'hebergements' of the user
     user.hebergements.push(savedHebergement._id);
     await user.save();
 
@@ -39,7 +33,6 @@ exports.createHebergement = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
-
 };
 // Delete
 exports.deleteHebergement = async (req, res) => {

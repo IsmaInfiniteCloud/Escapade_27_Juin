@@ -44,6 +44,7 @@ exports.signIn = async (req, res) => {
   }
 
   req.session.user = user;
+  console.log(user);
   // Vérification du motDePasse/encryption sur la DB
   const isMatch = await argon2.verify(user.motDePasse, motDePasse);
 
