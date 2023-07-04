@@ -26,7 +26,7 @@ function EscapadeModal({
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [blockedDates, setBlockedDates] = useState([]);
   const [escapadeFormValues, setEscapadeFormValues] = useState({
-    idUser: "",
+    idUser: {isUserId},
     titre: "",
     description: "",
     categorie: "",
