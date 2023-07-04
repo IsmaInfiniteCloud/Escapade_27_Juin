@@ -9,10 +9,11 @@ exports.createHebergement = async (req, res) => {
   try {
     if (!req.session.user) {
       return res.status(401).json({ message: "Veuillez vous connecter" });
+
     }
     //stocker le id de la session/user
-    //const userId = req.session.user._id;
-    const user = await User.findById(req.body.userId);
+   // const userId = req.session.user._id;
+    //const user = await User.findById(req.body.userId);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
@@ -22,8 +23,11 @@ exports.createHebergement = async (req, res) => {
     const newHebergement = new Hebergement({
       //attend tous les champs possibles et ajoute userId
       ...req.body,
-      user: user._id,
+      userId: req.session.user._id,
+     
     });
+    console.log("ligne 30 " + userId);
+    console.log(req.session.user._id)
 
     const savedHebergement = await newHebergement.save();
 
@@ -35,6 +39,7 @@ exports.createHebergement = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+
 };
 // Delete
 exports.deleteHebergement = async (req, res) => {

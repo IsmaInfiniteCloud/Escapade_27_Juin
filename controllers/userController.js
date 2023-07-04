@@ -5,6 +5,7 @@ exports.signUp = async (req, res) => {
 
   // Check si identifiant deja utilise
   let user = await User.findOne({ email });
+
   //console.log(req.body);
 
   if (user) {
@@ -53,7 +54,9 @@ exports.signIn = async (req, res) => {
   // Succes
 
   res.status(200).json({ message: "Bienvenue", user });
-  console.log(req.session.user);
+  console.log(req.session.user._id);
+  userId = req.session.user._id;
+  console.log(userId);
 };
 
 exports.logout = (req, res) => {
