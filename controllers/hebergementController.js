@@ -83,3 +83,18 @@ exports.getHebergement = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+//get-all hebergement
+exports.allHebergement = async (req, res) => {
+  try {
+    const hebergements = await Hebergement.find();
+
+    if (!hebergements || hebergements.length === 0) {
+      return res.status(404).json({ message: "Aucun hebergement nexiste" });
+    }
+
+    res.status(200).json(hebergements);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

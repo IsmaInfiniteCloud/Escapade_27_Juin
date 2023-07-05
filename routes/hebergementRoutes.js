@@ -13,9 +13,12 @@ router.delete("/:id", hebergementController.deleteHebergement);
 // Route update
 router.put("/:id", hebergementController.updateHebergement);
 
+//Get all-hebergement
+router.get("/all", hebergementController.allHebergement);
+
 // Route details
 router.get("/:id", hebergementController.getHebergement);
 
-//Get all-hebergement
+
 
 module.exports = router;
