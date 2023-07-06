@@ -5,11 +5,16 @@ import logo from "./escapade-rond.png";
 import logo2 from "./images/escapadeBl.png";
 import "./App.css";
 import Header from "./components/Header";
+import axios from "axios";
+import { getGeolocation } from "./components/GeolocationComponent";
 
 const App = () => {
   const [isModelVisible, setIsModelVisible] = useState(true);
   const [isLogoVisible, setIsLogoVisible] = useState(false);
   const [isLogo2Visible, setIsLogo2Visible] = useState(false);
+  const [hebergementsProchesVisible, setHebergementsProchesVisible] =
+    useState(false);
+  const [hebergementsProches, setHebergementsProches] = useState([]);
 
   useEffect(() => {
     const modelTimeout = setTimeout(() => {
@@ -20,6 +25,7 @@ const App = () => {
     const logoTimeout = setTimeout(() => {
       setIsLogoVisible(false);
       setIsLogo2Visible(true);
+      //setHebergementsProchesVisible(true);
     }, 5000);
 
     return () => {
@@ -27,6 +33,30 @@ const App = () => {
       clearTimeout(logoTimeout);
     };
   }, []);
+
+  useEffect(() => {
+    // Appel de la fonction pour récupérer les hébergements proches
+    setHebergementsProches();
+  }, []);
+
+  // const getHebergementsProches = async () => {
+  //   try {
+  //     const response = await axios.get("/api/hebergements-proches", {
+  //       params: {
+  //         limit: 10, // Exemple de limite
+  //       },
+  //     });
+
+  //     const hebergements = response.data;
+  //     console.log("Hébergements proches:", hebergements);
+  //     // Faites ce que vous voulez avec les hébergements récupérés
+  //   } catch (error) {
+  //     console.error(
+  //       "Erreur lors de la récupération des hébergements proches",
+  //       error
+  //     );
+  //   }
+  // };
 
   return (
     <div className="app ">

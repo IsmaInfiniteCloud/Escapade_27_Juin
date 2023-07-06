@@ -29,7 +29,11 @@ exports.createHebergement = async (req, res) => {
     user.hebergements.push(savedHebergement._id);
     await user.save();
 
-    res.status(201).json(savedHebergement);
+    // res.status(201).json(savedHebergement);
+    res.status(201).json({
+      message: "Escapade créée avec succès.",
+      hebergement: savedHebergement,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -79,21 +83,6 @@ exports.getHebergement = async (req, res) => {
     }
 
     res.status(200).json(hebergement);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-//get-all hebergement
-exports.allHebergement = async (req, res) => {
-  try {
-    const hebergements = await Hebergement.find();
-
-    if (!hebergements || hebergements.length === 0) {
-      return res.status(404).json({ message: "Aucun hebergement nexiste" });
-    }
-
-    res.status(200).json(hebergements);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

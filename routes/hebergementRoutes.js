@@ -19,6 +19,4 @@ router.get("/all", hebergementController.allHebergement);
 // Route details
 router.get("/:id", hebergementController.getHebergement);
 
-
-
 module.exports = router;

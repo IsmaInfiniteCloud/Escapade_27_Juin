@@ -25,7 +25,7 @@ exports.signUp = async (req, res) => {
 
   await user.save();
   res.status(201).json({
-    message: "Vous êtes maintenant inscrit a Escapade. Bienvenue",
+    message: "Vous êtes maintenant inscrit a Escapade",
     user,
   });
 };
@@ -40,7 +40,7 @@ exports.signIn = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.status(401).json({ error: "Cet identifiant est inexistant " });
+    return res.status(401).json({ error: "Cet identifiant est inexistant !" });
   }
 
   req.session.user = user;
@@ -49,13 +49,15 @@ exports.signIn = async (req, res) => {
   const isMatch = await argon2.verify(user.motDePasse, motDePasse);
 
   if (!isMatch) {
-    return res.status(401).json({ error: "Mot de passe invalide" });
+    return res.status(401).json({ error: "Mot de passe invalide !" });
   }
 
   // Succes
 
-  res.status(200).json({ message: "Bienvenue", user });
-  console.log(req.session.user._id);
+  res
+    .status(200)
+    .json({ message: user.prenom + ", Bienvenue sur Escapade", user });
+  //console.log(req.session.user._id);
   // userId = req.session.user._id;
   // console.log(userId);
 };
@@ -82,7 +84,10 @@ exports.patchPassword = async (req, res) => {
 
   User.findByIdAndUpdate(id, updateData, { new: true }, (err, user) => {
     if (err) {
-      return res.status(500).json({ message: "Erreur lors de la mise à jour des informations de l'utilisateur" });
+      return res.status(500).json({
+        message:
+          "Erreur lors de la mise à jour des informations de l'utilisateur",
+      });
     }
     if (!user) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
@@ -104,20 +109,25 @@ exports.patchEmail = async (req, res) => {
     return res.status(400).json({ message: "Cet email est déjà utilisé" });
   }
 
-  User.findByIdAndUpdate(id, { email: newEmail }, { new: true }, (err, user) => {
-    if (err) {
-      return res.status(500).json({ message: "Erreur lors de la mise à jour de l'email de l'utilisateur" });
+  User.findByIdAndUpdate(
+    id,
+    { email: newEmail },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Erreur lors de la mise à jour de l'email de l'utilisateur",
+        });
+      }
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+      }
+      return res.status(200).json({
+        message: "Email de l'utilisateur mis à jour avec succès",
+        user,
+      });
     }
-    if (!user) {
-      return res.status(404).json({ message: "Utilisateur non trouvé" });
-    }
-    return res.status(200).json({
-      message: "Email de l'utilisateur mis à jour avec succès",
-      user,
-    });
-  });
+  );
 };
-
-
 
 //Update User/gerer profil

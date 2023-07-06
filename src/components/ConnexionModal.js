@@ -16,6 +16,7 @@ function ConnexionModal({
   onSuccessfulLogin,
   nextPopupToShow,
   onGoToEscapade,
+  onServerMessage,
 }) {
   const [connexionFormValues, setConnexionFormValues] = useState({
     email: "",
@@ -91,6 +92,9 @@ function ConnexionModal({
           // Traitement de la réponse du serveur en cas de succès
           console.log("Réponse du serveur :", response.data);
           // si la connexion est réussie, on ferme la popup
+
+          // Définir le message de retour du serveur dans l'état du composant parent
+
           if (response.status === 200) {
             sessionStorage.setItem("connexion", "confirmée");
             confirmation = sessionStorage.getItem("connexion");
@@ -98,23 +102,30 @@ function ConnexionModal({
 
             // Réinitialisation des valeurs du formulaire de connexion
             resetForm();
+
             // on dit redirige l'utilisateur ver la popupToShow
             if (nextPopupToShow === "escapade") {
               onClose();
               onGoToEscapade();
+            } else {
+              onClose();
             }
             const userId = response.data.user._id;
             // on appelle la fonction onSuccessfulLogin pour mettre à jour le state de App.js
             onSuccessfulLogin(userId);
+            onServerMessage(response.data.message);
             console.log(userId);
           }
         })
         .catch((error) => {
-          // Traitement de l'erreur en cas d'échec de la soumission
-          console.error("Erreur lors de la soumission du formulaire :", error);
+          if (error.response.status === 401) {
+            onServerMessage(error.response.data.error);
+          } else {
+            onServerMessage(
+              "Une erreur s'est produite. Veuillez réessayer plus tard."
+            );
+          }
         });
-
-      onClose();
 
       // onGoToInscription();
     } else {
