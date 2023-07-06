@@ -98,7 +98,7 @@ exports.patchPassword = async (req, res) => {
     });
   });
 };
-
+// fait par Pascal
 exports.patchEmail = async (req, res) => {
   const id = req.params.id;
   const newEmail = req.body.email;
