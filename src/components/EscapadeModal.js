@@ -16,6 +16,7 @@ function EscapadeModal({
   onGotoConnexion,
   isUserLoggedIn,
   isUserId,
+  onServerMessage,
 }) {
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -28,7 +29,7 @@ function EscapadeModal({
     idUser: isUserId,
     titre: "",
     description: "",
-    categorie: "",
+    categorie: "Chalet",
     adresse: "",
     ville: "",
     codepostal: "",
@@ -36,7 +37,7 @@ function EscapadeModal({
     nbChambres: "",
     nbSallesDeBain: "",
     nbPersonnesMax: "",
-    animalAccepte: "",
+    animalAccepte: false,
     photos: "",
     prix: "",
   });
@@ -47,7 +48,7 @@ function EscapadeModal({
     setEscapadeFormValues({
       titre: "",
       description: "",
-      categorie: "",
+      categorie: "Chalet",
       adresse: "",
       ville: "",
       codepostal: "",
@@ -55,7 +56,7 @@ function EscapadeModal({
       nbChambres: "",
       nbSallesDeBain: "",
       nbPersonnesMax: "",
-      animalAccepte: "",
+      animalAccepte: false,
       photos: "",
       prix: "",
     });
@@ -103,12 +104,16 @@ function EscapadeModal({
       errors.codepostal = "Veuillez renseigner ce champ";
     }
 
-    if (escapadeFormValues.prix.trim() === "") {
-      errors.prix = "Veuillez renseigner ce champ";
-    } else if (
-      !/^[0-9]+$/.test(escapadeFormValues.prix) ||
-      escapadeFormValues.prix < 0
-    ) {
+    // if (escapadeFormValues.prix.trim() === "") {
+    //   errors.prix = "Veuillez renseigner ce champ";
+    // } else if (
+    //   !/^[0-9]+$/.test(escapadeFormValues.prix) ||
+    //   escapadeFormValues.prix < 0
+    // ) {
+    //   errors.prix = "Veuillez entrer un nombre positif";
+    // }
+
+    if (escapadeFormValues.prix < 0) {
       errors.prix = "Veuillez entrer un nombre positif";
     }
 
@@ -121,12 +126,16 @@ function EscapadeModal({
       errors.nbChambres = "Veuillez entrer un nombre positif";
     }
 
-    if (escapadeFormValues.nbSallesDeBain.trim() === "") {
-      errors.nbSallesDeBain = "Veuillez renseigner ce champ";
-    } else if (
-      !/^[0-9]+$/.test(escapadeFormValues.nbSallesDeBain) ||
-      escapadeFormValues.nbSallesDeBain < 0
-    ) {
+    // if (escapadeFormValues.nbSallesDeBain.trim() === "") {
+    //   errors.nbSallesDeBain = "Veuillez renseigner ce champ";
+    // } else if (
+    //   !/^[0-9]+$/.test(escapadeFormValues.nbSallesDeBain) ||
+    //   escapadeFormValues.nbSallesDeBain < 0
+    // ) {
+    //   errors.nbSallesDeBain = "Veuillez entrer un nombre positif";
+    // }
+
+    if (escapadeFormValues.nbSallesDeBain < 0) {
       errors.nbSallesDeBain = "Veuillez entrer un nombre positif";
     }
 
@@ -177,9 +186,9 @@ function EscapadeModal({
         ...escapadeFormValues,
         idUser: isUserId,
         nbChambres: parseInt(escapadeFormValues.nbChambres),
-        nbSallesDeBain: parseInt(escapadeFormValues.nbSallesDeBain),
+        nbSallesDeBain: parseFloat(escapadeFormValues.nbSallesDeBain),
         nbPersonnesMax: parseInt(escapadeFormValues.nbPersonnesMax),
-        animalAccepte: escapadeFormValues.animalAccepte === "true",
+        //animalAccepte: escapadeFormValues.animalAccepte === "true",
         photos: selectedPhotos,
         date_bloque: blockedDates,
         prix: parseFloat(escapadeFormValues.prix),
@@ -200,23 +209,26 @@ function EscapadeModal({
           console.log(escapadeData);
 
           // Traitement de la réponse
-          setEscapadeFormValues({
-            idUser: isUserId,
-            titre: "",
-            description: "",
-            categorie: "",
-            adresse: "",
-            ville: "",
-            codepostal: "",
-            pays: "",
-            nbChambres: "",
-            nbSallesDeBain: "",
-            nbPersonnesMax: "",
-            animalAccepte: "",
-            date_bloque: blockedDates,
-            photos: selectedPhotos,
-            prix: "",
-          });
+          // setEscapadeFormValues({
+          //   idUser: isUserId,
+          //   titre: "",
+          //   description: "",
+          //   categorie: "",
+          //   adresse: "",
+          //   ville: "",
+          //   codepostal: "",
+          //   pays: "",
+          //   nbChambres: "",
+          //   nbSallesDeBain: "",
+          //   nbPersonnesMax: "",
+          //   animalAccepte: "",
+          //   date_bloque: blockedDates,
+          //   photos: selectedPhotos,
+          //   prix: "",
+          // });
+
+          resetForm();
+          onServerMessage(response.data.message);
           setSelectedFiles([]);
           setSelectedPhotos([]);
           setEscapadeFormErrors({});
@@ -224,15 +236,23 @@ function EscapadeModal({
           //setIsEscapadeOpen(false);
         })
         .catch((error) => {
+          resetForm();
           // Traitement de l'erreur en cas d'échec de la soumission
-          console.error(
-            "Erreur lors de la soumission du formulaire :",
-            error,
-            escapadeFormValues
+          resetForm();
+          setSelectedFiles([]);
+          setSelectedPhotos([]);
+          setEscapadeFormErrors({});
+
+          // console.error(
+          //   "Erreur lors de la soumission du formulaire :",
+          //   error,
+          //   escapadeFormValues
+          // );
+          onServerMessage(
+            "Une erreur s'est produite. Veuillez réessayer plus tard."
           );
+          onClose();
         });
-    } else {
-      setEscapadeFormErrors(errors);
     }
   };
 
@@ -336,10 +356,22 @@ function EscapadeModal({
 
             <div className="form-group">
               <label htmlFor="categorie">Catégorie</label>
-              <select id="categorie" className="form-control mb-2">
-                <option value="1">Chalet</option>
-                <option value="2">Appartement</option>
-                <option value="3">Maison</option>
+              <select
+                id="categorie"
+                className="form-control mb-2"
+                value={escapadeFormValues.selectOption}
+                onChange={(e) =>
+                  setEscapadeFormValues({
+                    ...escapadeFormValues,
+                    categorie: e.target.value,
+                  })
+                }
+              >
+                <option value="Chalet" selected>
+                  Chalet
+                </option>
+                <option value="Appartement">Appartement</option>
+                <option value="Maison">Maison</option>
               </select>
             </div>
 
@@ -478,12 +510,13 @@ function EscapadeModal({
                 }`}
                 placeholder="Entrez le nombre de salles de bain de votre escapade"
                 value={escapadeFormValues.nbSallesDeBain}
-                onChange={(e) =>
+                onChange={(e) => {
+                  let number = Number(e.target.value.replace(",", "."));
                   setEscapadeFormValues({
                     ...escapadeFormValues,
-                    nbSallesDeBain: e.target.value,
-                  })
-                }
+                    nbSallesDeBain: number,
+                  });
+                }}
                 required
               />
               {escapadeFormErrors.nbSallesDeBain && (
@@ -524,10 +557,17 @@ function EscapadeModal({
               <div className="form-check my-2">
                 <input
                   type="checkbox"
-                  id="animaux"
+                  id="animalAccepte"
                   className="form-check-input"
+                  checked={escapadeFormValues.animalAccepte}
+                  onChange={(e) => {
+                    setEscapadeFormValues({
+                      ...escapadeFormValues,
+                      animalAccepte: e.target.checked,
+                    });
+                  }}
                 />
-                <label className="form-check-label" htmlFor="animaux">
+                <label className="form-check-label" htmlFor="animalAccepte">
                   Animaux acceptés
                 </label>
               </div>
@@ -543,12 +583,13 @@ function EscapadeModal({
                 }`}
                 placeholder="Entrez le prix par jour de votre escapade"
                 value={escapadeFormValues.prix}
-                onChange={(e) =>
+                onChange={(e) => {
+                  let number = Number(e.target.value.replace(",", "."));
                   setEscapadeFormValues({
                     ...escapadeFormValues,
-                    prix: e.target.value,
-                  })
-                }
+                    prix: number,
+                  });
+                }}
                 required
               />
               {escapadeFormErrors.prix && (
@@ -688,18 +729,18 @@ function EscapadeModal({
         >
           <button
             type="submit"
-            className="btn btn-dark"
+            className="btn btn-dark my-3 mx-3"
             onClick={handleEscapadeSubmit}
           >
             Soumettre
           </button>
-          <button
+          {/* <button
             type="button"
             className="btn btn-dark my-3 mx-3"
             onClick={() => setIsEscapadeOpen(false)}
           >
             Fermer
-          </button>
+          </button> */}
         </div>
       </Modal>
     </div>

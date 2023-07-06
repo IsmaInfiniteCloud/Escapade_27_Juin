@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaGlobe } from "react-icons/fa";
 import { BiSearch, BiUser, BiMenu } from "react-icons/bi";
 import logo from "../images/escapade.png";
@@ -7,6 +7,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import InscriptionModal from "./InscriptionModal";
 import ConnexionModal from "./ConnexionModal";
 import EscapadeModal from "./EscapadeModal";
+import MessageModal from "./MessageModal";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -19,6 +20,26 @@ function Header() {
   const [PopupToShow, setPopupToShow] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isUserId, setIsUserId] = useState(null);
+  //const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isShowMessageModal, setShowMessageModal] = useState(false);
+  const [serverMessage, setServerMessage] = useState("");
+
+  useEffect(() => {
+    if (serverMessage) {
+      // Afficher le modal du message du serveur
+      setShowMessageModal(true);
+
+      // Réinitialiser le message du serveur après l'affichage du modal
+      setTimeout(() => {
+        setShowMessageModal(false);
+        setServerMessage("");
+      }, 3000);
+    }
+  }, [serverMessage]);
+
+  const handleServerMessage = (message) => {
+    setServerMessage(message);
+  };
 
   const handleInscriptionClick = (event) => {
     event.preventDefault();
@@ -69,29 +90,18 @@ function Header() {
   const handleSuccessfulLogin = (userId) => {
     setIsUserLoggedIn(true);
     setIsUserId(userId);
-    alert("Connexion réussie. \n\nBienvenue sur Escapade!   userId: " + userId);
-    // console.log("Connexion réussie");
-    console.log(userId);
   };
 
   const handleLogout = () => {
     setIsUserLoggedIn(false);
-    alert("Déconnexion réussie");
+    setIsUserId(null);
+    setServerMessage("Merci d'avoir utilisé Escapade");
+    //afficher le modal de succès
+    setShowMessageModal(true);
   };
 
   return (
     <div>
-      {/* {isUserLoggedIn && <div>Bienvenue sur Escapade</div>}
-
-      <button onClick={() => setIsConnexionOpen(true)}>Open Modal</button>
-
-      {isConnexionOpen && (
-        <ConnexionModal
-          isOpen={isConnexionOpen}
-          onClose={handleCloseModal}
-          onSuccessfulLogin={handleSuccessfulLogin}
-        />
-      )} */}
       <header className="header">
         <div className="container-fluid">
           <div className="container">
@@ -160,8 +170,9 @@ function Header() {
                       <>
                         <li>
                           <a
-                            className="dropdown-item"
                             href="#"
+                            className="dropdown-item"
+
                             // onClick={handleAccountManagementClick}
                           >
                             Gérer mon compte
@@ -169,8 +180,8 @@ function Header() {
                         </li>
                         <li>
                           <a
-                            className="dropdown-item"
                             href="#"
+                            className="dropdown-item"
                             onClick={handleLogout}
                           >
                             Déconnexion
@@ -181,8 +192,8 @@ function Header() {
                       <>
                         <li>
                           <a
-                            className="dropdown-item inscription-link"
                             href="#"
+                            className="dropdown-item inscription-link"
                             onClick={handleInscriptionClick}
                           >
                             Inscription
@@ -190,8 +201,8 @@ function Header() {
                         </li>
                         <li>
                           <a
-                            className="dropdown-item"
                             href="#"
+                            className="dropdown-item"
                             onClick={handleLoginClick}
                           >
                             Connexion
@@ -212,6 +223,7 @@ function Header() {
         isOpen={isInscriptionOpen}
         onClose={() => setIsInscriptionOpen(false)}
         onGoToConnexion={openConnexionModal}
+        onServerMessage={handleServerMessage}
       />
       <ConnexionModal
         className="custom-modal"
@@ -221,6 +233,7 @@ function Header() {
         onGoToInscription={openInscriptionModal}
         nextPopupToShow={PopupToShow}
         onGoToEscapade={openEscapadeModal}
+        onServerMessage={handleServerMessage}
       />
 
       <EscapadeModal
@@ -230,7 +243,19 @@ function Header() {
         onGoToConnexion={openConnexionModal}
         isUserLoggedIn={isUserLoggedIn}
         isUserId={isUserId}
+        onServerMessage={handleServerMessage}
       />
+      <Modal
+        className="message-modal border border-dark p-3"
+        isOpen={isShowMessageModal}
+        onRequestClose={() => setShowMessageModal(false)}
+        contentLabel="Success Modal"
+      >
+        <h4>{serverMessage}</h4>
+
+        {/* <p>Bienvenue sur Escapade!</p> */}
+        {/* <button onClick={() => setShowSuccessModal(false)}>Fermer</button> */}
+      </Modal>
     </div>
   );
 }

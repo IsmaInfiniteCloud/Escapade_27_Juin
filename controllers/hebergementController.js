@@ -29,7 +29,11 @@ exports.createHebergement = async (req, res) => {
     user.hebergements.push(savedHebergement._id);
     await user.save();
 
-    res.status(201).json(savedHebergement);
+    // res.status(201).json(savedHebergement);
+    res.status(201).json({
+      message: "Escapade créée avec succès.",
+      hebergement: savedHebergement,
+    });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

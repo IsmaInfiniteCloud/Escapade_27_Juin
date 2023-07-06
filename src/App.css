@@ -177,7 +177,7 @@ header {
   max-height: 95%;
   width: 600px; /* Ajustez cette valeur selon vos besoins */
   margin: 0 auto; /* Centrez le modal horizontalement */
-  background-color: rgba(255,255,255,0.75);
+  background-color: rgba(255,255,255);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -187,22 +187,43 @@ header {
   
 }
 
-.monModal{
+.message-modal{
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 2rem;
-  max-width: 75%;
-  max-height: 75%;
-  width: 600px; /* Ajustez cette valeur selon vos besoins */
+  max-width: 95%;
+  max-height: 95%;
+  width: fit-content;
   margin: 0 auto; /* Centrez le modal horizontalement */
-  background-color: rgba(255,255,255,0.75);
+  background-color: rgba(0,0,0);
+  color:#ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   padding-top: 2rem;
   padding-bottom: 2rem;
+  border-radius: 1rem;
+  
+}
+
+
+.monModal{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  max-width: 75%;
+  max-height: 75%;
+  width: 500px; /* Ajustez cette valeur selon vos besoins */
+  margin: 0 auto; /* Centrez le modal horizontalement */
+  background-color: rgba(255,255,255,0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   border-radius: 1rem;
 }
 
@@ -224,7 +245,7 @@ width: 100%;
   border-radius: 1rem;
   
   padding: 0;
-  background-color: rgba(255,255,255,0.75);
+  background-color: rgba(255,255,255);
   overflow-y:auto;
 }
 

@@ -10,8 +10,14 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
 
-function InscriptionModal({ isOpen, onClose, onGoToConnexion }) {
+function InscriptionModal({
+  isOpen,
+  onClose,
+  onGoToConnexion,
+  onServerMessage,
+}) {
   const [formValues, setFormValues] = useState({
     prenom: "",
     nom: "",
@@ -58,6 +64,8 @@ function InscriptionModal({ isOpen, onClose, onGoToConnexion }) {
 
     if (formValues.email.trim() === "") {
       errors.email = "Veuillez renseigner ce champ";
+    } else if (!emailRegex.test(formValues.email)) {
+      errors.email = "Veuillez saisir une adresse email valide";
     }
 
     if (formValues.motDePasse.trim() === "") {
@@ -96,32 +104,38 @@ function InscriptionModal({ isOpen, onClose, onGoToConnexion }) {
           // Gestion de la réponse de l'API.
           if (response.status === 201) {
             //réinitialisation du formulaire
-            setFormValues({
-              prenom: "",
-              nom: "",
-              email: "",
-              motDePasse: "",
-              repete_passe: "",
-            });
+            // setFormValues({
+            //   prenom: "",
+            //   nom: "",
+            //   email: "",
+            //   motDePasse: "",
+            //   repete_passe: "",
+            // });
+
+            resetForm();
+            onServerMessage(response.data.message);
             // Si l'inscription est réussie, fermer le modal.
             onClose();
             onGoToConnexion();
-          } else {
-            // Si l'API renvoie une erreur, la gérer ici.
-            // Par exemple, définir une erreur de formulaire générique à afficher.
-            setFormErrors((prevErrors) => ({
-              ...prevErrors,
-              apiError: "Une erreur est survenue lors de l'inscription.",
-            }));
           }
         })
         .catch((error) => {
-          // Gestion des erreurs de requête HTTP.
-          setFormErrors((prevErrors) => ({
-            ...prevErrors,
-            apiError:
-              "Une erreur est survenue lors de la communication avec le serveur.",
-          }));
+          // setFormValues({
+          //   prenom: "",
+          //   nom: "",
+          //   email: "",
+          //   motDePasse: "",
+          //   repete_passe: "",
+          // });
+          resetForm();
+          if (error.response.status === 400) {
+            onServerMessage(error.response.data.message);
+          } else {
+            onServerMessage(
+              "Une erreur s'est produite. Veuillez réessayer plus tard."
+            );
+          }
+          onClose();
         });
     }
   };
