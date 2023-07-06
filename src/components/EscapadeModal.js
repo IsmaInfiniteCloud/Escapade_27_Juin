@@ -195,7 +195,7 @@ function EscapadeModal({
         location: {
           // Create the location object
           type: "Point", // Set the type property
-          coordinates: [coordinates.lat, coordinates.lng], // Directly set the coordinates property to the returned coordinates array
+          coordinates: [coordinates.lng, coordinates.lat], // Directly set the coordinates property to the returned coordinates array
         },
       };
       // Soumission du formulaire

@@ -87,3 +87,33 @@ exports.getHebergement = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+exports.getHebergementsProches = (req, res) => {
+  // const latitude = parseFloat(req.query.latitude);
+  // const longitude = parseFloat(req.query.longitude);
+  const limit = parseInt(req.query.limit);
+
+  Hebergement.find(
+    // {
+    //   location: {
+    //     $near: {
+    //       $geometry: {
+    //         type: "Point",
+    //         coordinates: [longitude, latitude],
+    //       },
+    //     },
+    //   },
+    // },
+    { photos: { $slice: 1 } }
+  )
+    .limit(limit)
+    .then((hebergements) => {
+      res.json(hebergements);
+    })
+    .catch((error) => {
+      res.status(500).json({
+        error:
+          "Une erreur est survenue lors de la récupération des hébergements.",
+      });
+    });
+};

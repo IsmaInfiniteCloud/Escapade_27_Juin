@@ -16,6 +16,12 @@ router.put("/:id", hebergementController.updateHebergement);
 // Route details
 router.get("/:id", hebergementController.getHebergement);
 
+// Route pour recuperer les 10 hebergements les plus proches
+router.get(
+  "/hebergements-proches",
+  hebergementController.getHebergementsProches
+);
+
 //Get all-hebergement
 
 module.exports = router;
