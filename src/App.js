@@ -21,8 +21,11 @@ const App = () => {
   const [selectedHebergement, setSelectedHebergement] = useState(null);
 
   const handleCardClick = (hebergement) => {
-    setSelectedHebergement(hebergement);
-    setIsDetailsHebergementModalOpen(true);
+    //event.preventDefault();
+    alert("Va afficher les détails d'une Escapade");
+
+    //setSelectedHebergement(hebergement);
+    //setIsDetailsHebergementModalOpen(true);
   };
 
   useEffect(() => {
@@ -86,7 +89,6 @@ const App = () => {
               <div
                 className="hebergementsAll__container__item col-md-4"
                 key={index}
-                onClick={() => handleCardClick(hebergement)}
               >
                 <div
                   className="card my-3"

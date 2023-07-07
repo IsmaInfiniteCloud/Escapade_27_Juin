@@ -355,6 +355,10 @@ width: 100%;
   color: rgb(255, 0, 0);
 }
 
+.hebergementsAll__container__item{
+  cursor: pointer;
+}
+
 
 
  
