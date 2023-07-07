@@ -90,7 +90,10 @@ exports.getHebergement = async (req, res) => {
 //get-all hebergement
 exports.allHebergement = async (req, res) => {
   try {
-    const hebergements = await Hebergement.find();
+    const limit = parseInt(req.query.limit);
+    const hebergements = await Hebergement.aggregate([
+      { $sample: { size: limit } },
+    ]);
 
     if (!hebergements || hebergements.length === 0) {
       return res.status(404).json({ message: "Aucun hebergement nexiste" });
