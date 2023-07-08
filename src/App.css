@@ -282,7 +282,7 @@ width: 100%;
  .modal-dialog-scrollable{
   position: relative;
   scroll-behavior: auto;
-  top: 50%;
+  top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
   /* display: flex; */
@@ -297,11 +297,45 @@ width: 100%;
   overflow-y:auto;
 }
 
+.modal-dialog-details{
+  position: relative;
+  scroll-behavior: auto;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
+  max-width: 70%;
+  height:90%;
+  max-height: 100%;
+  border-radius: 1rem;
+  
+  padding: 0;
+  background-color: rgba(255,255,255);
+  overflow-y:auto;
+}
+
 /* .custom-modal-dialog {
   max-width: 75%;
   overflow-y: scroll;
 } */
 
+.close-button {
+  color: white;
+  background-color: black;
+  border:1px solid black;
+  border-radius: 5px;
+  
+  font-weight: bold;
+  padding: 0;
+
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 20px;
+}
 
 
 .btn{
@@ -358,6 +392,11 @@ width: 100%;
 .hebergementsAll__container__item{
   cursor: pointer;
 }
+
+.react-datepicker__day--highlighted-custom-1 {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
 
 
 

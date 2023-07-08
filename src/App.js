@@ -21,11 +21,8 @@ const App = () => {
   const [selectedHebergement, setSelectedHebergement] = useState(null);
 
   const handleCardClick = (hebergement) => {
-    //event.preventDefault();
-    alert("Va afficher les détails d'une Escapade");
-
-    //setSelectedHebergement(hebergement);
-    //setIsDetailsHebergementModalOpen(true);
+    setSelectedHebergement(hebergement);
+    setIsDetailsHebergementModalOpen(true);
   };
 
   useEffect(() => {
@@ -62,6 +59,7 @@ const App = () => {
   return (
     <div className="app">
       <Header />
+
       {isModelVisible && (
         <div className="canvas-container">
           <Canvas>
@@ -130,6 +128,13 @@ const App = () => {
             ))}
           </div>
         </div>
+      )}
+
+      {isDetailsHebergementModalOpen && (
+        <DetailsHebergementModal
+          hebergement={selectedHebergement}
+          onClose={() => setIsDetailsHebergementModalOpen(false)}
+        />
       )}
     </div>
   );

@@ -166,21 +166,20 @@ function EscapadeModal({
   const handleEscapadeSubmit = async (event) => {
     event.preventDefault();
 
-    const coordinates = await getCoordinates(
-      escapadeFormValues.adresse,
-      escapadeFormValues.ville,
-      escapadeFormValues.codepostal,
-      escapadeFormValues.pays
-    );
+    // console.log("Coordonnées:", coordinates);
 
-    console.log("Coordonnées:", coordinates);
-
-    console.log("Dates bloquées : ", blockedDates);
-    console.log("Photos sélectionnées : ", selectedPhotos);
+    // console.log("Dates bloquées : ", blockedDates);
+    // console.log("Photos sélectionnées : ", selectedPhotos);
 
     const errors = validateEscapadeForm();
 
     if (Object.keys(errors).length === 0) {
+      const coordinates = await getCoordinates(
+        escapadeFormValues.adresse,
+        escapadeFormValues.ville,
+        escapadeFormValues.codepostal,
+        escapadeFormValues.pays
+      );
       // Convert form values to appropriate types
       const escapadeData = {
         ...escapadeFormValues,
@@ -208,25 +207,6 @@ function EscapadeModal({
         .then((response) => {
           console.log(escapadeData);
 
-          // Traitement de la réponse
-          // setEscapadeFormValues({
-          //   idUser: isUserId,
-          //   titre: "",
-          //   description: "",
-          //   categorie: "",
-          //   adresse: "",
-          //   ville: "",
-          //   codepostal: "",
-          //   pays: "",
-          //   nbChambres: "",
-          //   nbSallesDeBain: "",
-          //   nbPersonnesMax: "",
-          //   animalAccepte: "",
-          //   date_bloque: blockedDates,
-          //   photos: selectedPhotos,
-          //   prix: "",
-          // });
-
           resetForm();
           onServerMessage(response.data.message);
           setSelectedFiles([]);
@@ -242,12 +222,6 @@ function EscapadeModal({
           setSelectedFiles([]);
           setSelectedPhotos([]);
           setEscapadeFormErrors({});
-
-          // console.error(
-          //   "Erreur lors de la soumission du formulaire :",
-          //   error,
-          //   escapadeFormValues
-          // );
           onServerMessage(
             "Une erreur s'est produite. Veuillez réessayer plus tard."
           );
@@ -278,7 +252,7 @@ function EscapadeModal({
       {/* Modal content and form */}
       <Modal
         scrollable={true}
-        className="custom-modal-dialog modal-dialog-scrollable border border-dark"
+        className="custom-dialog-modal  modal-dialog-scrollable border border-dark"
         // className="custom-modal"
         isOpen={isOpen}
         onRequestClose={() => {
