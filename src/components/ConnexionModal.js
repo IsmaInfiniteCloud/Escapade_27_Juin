@@ -142,8 +142,9 @@ function ConnexionModal({
       }}
       className="custom-modal border border-dark"
     >
-      <form onSubmit={handleConnexionSubmit} className="container w-75">
+      <form onSubmit={handleConnexionSubmit} className="container px-5">
         <h2>Connexion</h2>
+
         {/* Login form fields */}
         <div className="form-group">
           <label htmlFor="loginEmail">Email</label>

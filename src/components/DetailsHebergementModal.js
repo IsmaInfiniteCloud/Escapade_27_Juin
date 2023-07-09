@@ -1,19 +1,26 @@
-import React, { useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import fr from "date-fns/locale/fr";
+import { ModalProvider, useModalContext } from "./ModalProvider";
+
 registerLocale("fr", fr);
 
 //Modal.setAppElement("#root"); // Remplacez '#root' par l'id de l'élément racine de votre application
 
 function DetailsHebergementModal({ hebergement, onClose }) {
+  const { detailsHebergementModalOpen, setDetailsHebergementModalOpen } =
+    useModalContext();
+
   const handleReserverClick = (event) => {
     event.preventDefault();
     alert("C'est ici que nous affichons le formulaire de réservation");
-    onClose();
+    setDetailsHebergementModalOpen(false);
   };
+
+  const handleClose = () => setDetailsHebergementModalOpen(false);
 
   // Convertir les dates de réservation en objets Date pour le DatePicker
   // Convertir les dates de réservation en objets Date pour le DatePicker
@@ -34,8 +41,9 @@ function DetailsHebergementModal({ hebergement, onClose }) {
     <Modal
       scrollable={true}
       className="modal-dialog-details border border-dark"
-      isOpen={true}
-      onRequestClose={onClose}
+      isOpen={detailsHebergementModalOpen}
+      onClose={handleClose}
+      onRequestClose={handleClose}
       contentLabel="Détails de l'hébergement"
     >
       <div
@@ -119,6 +127,7 @@ function DetailsHebergementModal({ hebergement, onClose }) {
           locale="fr"
           selected={null}
           monthsShown={3}
+          fixedHeight
           highlightDates={highlightWithRanges}
           excludeDates={datesBloquees}
           onChangeRaw={(e) => e.preventDefault()}

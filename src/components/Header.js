@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { FaGlobe } from "react-icons/fa";
 import { BiSearch, BiUser, BiMenu } from "react-icons/bi";
 import logo from "../images/escapade.png";
@@ -7,12 +7,38 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import InscriptionModal from "./InscriptionModal";
 import ConnexionModal from "./ConnexionModal";
 import EscapadeModal from "./EscapadeModal";
+import DetailsHebergementModal from "./DetailsHebergementModal";
 import MessageModal from "./MessageModal";
 import Modal from "react-modal";
+import { ModalProvider, useModalContext } from "./ModalProvider";
 
 Modal.setAppElement("#root");
 
 function Header() {
+  //pour gérer les modals
+  const {
+    headerModalOpen,
+    setHeaderModalOpen,
+    detailsHebergementModalOpen,
+    setDetailsHebergementModalOpen,
+  } = useModalContext();
+
+  const handleOpenModal = () => {
+    // Ferme la modal DetailsHebergement si elle est ouverte
+    if (detailsHebergementModalOpen) {
+      setDetailsHebergementModalOpen(false);
+    }
+
+    // Ouvre la modal du Header
+    setHeaderModalOpen(true);
+  };
+
+  //pour gérer les modals
+  const handleClick = () => {
+    setHeaderModalOpen(true);
+    setDetailsHebergementModalOpen(false);
+  };
+
   const [isInscriptionOpen, setIsInscriptionOpen] = useState(false);
   const [isConnexionOpen, setIsConnexionOpen] = useState(false);
   const [isEscapadeOpen, setIsEscapadeOpen] = useState(false);
@@ -23,6 +49,7 @@ function Header() {
   //const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isShowMessageModal, setShowMessageModal] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   useEffect(() => {
     if (serverMessage) {
@@ -61,7 +88,9 @@ function Header() {
 
   const handleEscapadeClick = (event) => {
     event.preventDefault();
+    handleOpenModal();
     setIsEscapadeOpen(true);
+
     if (!isUserLoggedIn) {
       setPopupToShow("escapade");
       setIsEscapadeOpen(false);
@@ -74,11 +103,13 @@ function Header() {
   };
 
   const openInscriptionModal = () => {
+    handleOpenModal();
     setIsInscriptionOpen(true);
     setIsConnexionOpen(false);
   };
 
   const openConnexionModal = () => {
+    handleOpenModal();
     setIsConnexionOpen(true);
     setIsInscriptionOpen(false);
   };
@@ -228,7 +259,9 @@ function Header() {
       <ConnexionModal
         className="custom-modal "
         isOpen={isConnexionOpen}
-        onClose={() => setIsConnexionOpen(false)}
+        onClose={() => {
+          setIsConnexionOpen(false);
+        }}
         onSuccessfulLogin={handleSuccessfulLogin}
         onGoToInscription={openInscriptionModal}
         nextPopupToShow={PopupToShow}
