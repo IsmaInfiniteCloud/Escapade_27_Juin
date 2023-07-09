@@ -168,7 +168,7 @@ function EscapadeModal({
 
     // console.log("Coordonnées:", coordinates);
 
-    // console.log("Dates bloquées : ", blockedDates);
+    console.log("Dates bloquées : ", blockedDates);
     // console.log("Photos sélectionnées : ", selectedPhotos);
 
     const errors = validateEscapadeForm();
@@ -187,7 +187,6 @@ function EscapadeModal({
         nbChambres: parseInt(escapadeFormValues.nbChambres),
         nbSallesDeBain: parseFloat(escapadeFormValues.nbSallesDeBain),
         nbPersonnesMax: parseInt(escapadeFormValues.nbPersonnesMax),
-        //animalAccepte: escapadeFormValues.animalAccepte === "true",
         photos: selectedPhotos,
         date_bloque: blockedDates,
         prix: parseFloat(escapadeFormValues.prix),
@@ -227,6 +226,8 @@ function EscapadeModal({
           );
           onClose();
         });
+    } else {
+      setEscapadeFormErrors(errors);
     }
   };
 

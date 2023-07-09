@@ -1,26 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import Modal from "react-modal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import fr from "date-fns/locale/fr";
+registerLocale("fr", fr);
 
 //Modal.setAppElement("#root"); // Remplacez '#root' par l'id de l'élément racine de votre application
 
 function DetailsHebergementModal({ hebergement, onClose }) {
   const handleReserverClick = (event) => {
     event.preventDefault();
+    alert("C'est ici que nous affichons le formulaire de réservation");
     onClose();
   };
 
   // Convertir les dates de réservation en objets Date pour le DatePicker
   // Convertir les dates de réservation en objets Date pour le DatePicker
-  const reservationDates = hebergement.reservations
-    ? hebergement.reservations.map((dateString) => new Date(dateString))
+  const datesBloquees = hebergement.date_bloque
+    ? hebergement.date_bloque.map((dateString) => new Date(dateString))
     : [];
 
   // Vous pouvez également utiliser la fonction highlightDates pour donner un style spécifique aux dates réservées
   const highlightWithRanges = [
     {
-      "react-datepicker__day--highlighted-custom-1": reservationDates,
+      "react-datepicker__day--highlighted-custom-1": datesBloquees,
     },
   ];
 
@@ -86,6 +90,9 @@ function DetailsHebergementModal({ hebergement, onClose }) {
           <span className="fw-bold">Animaux acceptés:</span>{" "}
           {hebergement.animalAccepte ? "Oui" : "Non"}
         </p>
+        <p className="py-0">
+          <span className="fw-bold">Prix:</span> {hebergement.prix} $ / nuit
+        </p>
         <div className="container px-0 py-3">
           <div className="row">
             {hebergement.photos.map((photo, index) => {
@@ -106,19 +113,15 @@ function DetailsHebergementModal({ hebergement, onClose }) {
             })}
           </div>
         </div>
-        {/* <div className="calendar">
-          <h3>Disponibilités</h3>
-          {hebergement.reservations &&
-            hebergement.reservations.map((reservation, index) => (
-              <p key={index}>{reservation}</p> // Formattez ces dates comme vous le souhaitez
-            ))}
-                  
-        </div> */}
         <h3>Disponibilités</h3>
         <DatePicker
           inline
-          includeDates={reservationDates}
+          locale="fr"
+          selected={null}
+          monthsShown={3}
           highlightDates={highlightWithRanges}
+          excludeDates={datesBloquees}
+          onChangeRaw={(e) => e.preventDefault()}
         />
       </div>
       <hr />
@@ -126,6 +129,7 @@ function DetailsHebergementModal({ hebergement, onClose }) {
         type="button"
         className="btn btn-dark my-3 mx-5 fw-bold"
         onClick={handleReserverClick}
+        //onChangeRaw={(e) => e.preventDefault()}
       >
         Réserver
       </button>

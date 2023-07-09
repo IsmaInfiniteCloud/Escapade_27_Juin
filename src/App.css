@@ -393,11 +393,33 @@ width: 100%;
   cursor: pointer;
 }
 
+
+
+.react-datepicker__day--today-custom-1 {
+  background-color: inherit;
+}
+
 .react-datepicker__day--highlighted-custom-1 {
   background-color: rgba(255, 0, 0, 0.5);
 }
 
+.react-datepicker__day-custom-1:hover {
+  background-color: inherit;
+  border-radius: 0;
+}
 
+.react-datepicker__navigation--previous {
+  border-right-color: #000000;
+}
+
+.react-datepicker__navigation--next {
+  border-left-color: #000000;
+}
+
+.react-datepicker__navigation--previous,
+.react-datepicker__navigation--next {
+    filter: brightness(0%);
+}
 
 
  
