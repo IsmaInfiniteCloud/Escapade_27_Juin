@@ -379,11 +379,11 @@ width: 100%;
   margin-bottom: 1rem;
  }
 
- /* img{
-  border: 1px solid #000;
+ img{
+  
   border-radius: .5rem;
 
- } */
+ }
 
  .red-icon {
   color: rgb(255, 0, 0);
@@ -400,6 +400,7 @@ width: 100%;
 }
 
 .react-datepicker__day--highlighted-custom-1 {
+  border-radius: 5px;
   background-color: rgba(255, 0, 0, 0.5);
 }
 

@@ -149,7 +149,7 @@ function InscriptionModal({
       }}
       className="custom-modal border border-dark"
     >
-      <form onSubmit={handleSubmit} className="container w-75 px-0">
+      <form onSubmit={handleSubmit} className="container px-5">
         <h2>Inscription</h2>
         <div className="form-group">
           <label htmlFor="prenom">Prénom</label>

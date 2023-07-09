@@ -265,9 +265,18 @@ function EscapadeModal({
           className="modal-header"
           style={{ position: "sticky", top: 0, zIndex: 1 }}
         >
-          <h2 className="modal-title ms-5 mt-4  mb-2 fs-1">
+          <h2 className="modal-title ms-5 mt-4  mb-2 fs-2">
             Créer une Escapade
           </h2>
+          <div className="modal-header d-flex justify-content-between align-items-center">
+            <button
+              variant="dark"
+              onClick={onClose}
+              className="close-button me-4 mt-4 mb-2"
+            >
+              X
+            </button>
+          </div>
         </div>
         <hr />
         <div
