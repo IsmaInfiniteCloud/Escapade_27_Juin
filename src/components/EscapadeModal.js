@@ -587,6 +587,7 @@ function EscapadeModal({
               <label htmlFor="blockedDates">Bloquer des dates</label>
               <DatePicker
                 id="blockedDates"
+                locale="fr"
                 selected={null}
                 onChange={(dates) => setSelectedDates(dates)}
                 selectsRange
