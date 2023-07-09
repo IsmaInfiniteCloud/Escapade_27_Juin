@@ -2,12 +2,32 @@
   position: absolute;
   top: 0;
   width: 100vw;
+  height:fit-content;
+  background: #000000;
+  
+}
+
+body {
+  overflow-x: hidden;
+}
+
+
+.canvas-container, .logo-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100vw;
   height: 100vh;
   background: #000000;
+  z-index: -1;
 }
+
+
 
 .App-logo {
   height: 40vmin;
+  width: 40wmin;
   pointer-events: none;
 }
 
@@ -21,23 +41,28 @@
   transition: opacity 2s ;
 }
 
-.logo-container {
+.logo {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   opacity: 1;
   transition: opacity 2s;
+  z-index: 300;
 }
 
 .hidden {
   display: none;
 }
 
-Canvas {
+/* Canvas {
   position: relative;
   top: 43%;
   left: 50%;
   transform: translate(-50%, -50%);
   max-width: 90%;
   max-height: 90%;
-}
+} */
 
 .logo {
   position: absolute;
@@ -50,7 +75,7 @@ Canvas {
 
 .logoFull{
   width: 13%;
-  margin-top: 2%;
+  margin-top: 6%;
   margin-left: auto;
   margin-right: auto;
 
@@ -80,13 +105,16 @@ Canvas {
 } */
 
 header {
+  position: fixed;
   background-color: #ffffff;
+  
   min-height: 5vh;
   max-height: 15vh;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  z-index: 500;
 }
 
 .App-link {
@@ -207,6 +235,26 @@ header {
   
 }
 
+.message-modal-bienvenue{
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-width: 95%;
+  max-height: 95%;
+  width: fit-content;
+  margin: 0 auto; /* Centrez le modal horizontalement */
+  background-color: rgba(0,0,0);
+  color:#ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 1rem;
+  
+}
+
 
 .monModal{
   position: absolute;
@@ -234,7 +282,7 @@ width: 100%;
  .modal-dialog-scrollable{
   position: relative;
   scroll-behavior: auto;
-  top: 50%;
+  top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
   /* display: flex; */
@@ -249,11 +297,45 @@ width: 100%;
   overflow-y:auto;
 }
 
+.modal-dialog-details{
+  position: relative;
+  scroll-behavior: auto;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* display: flex; */
+  align-items: center;
+  justify-content: center;
+  max-width: 70%;
+  height:90%;
+  max-height: 100%;
+  border-radius: 1rem;
+  
+  padding: 0;
+  background-color: rgba(255,255,255);
+  overflow-y:auto;
+}
+
 /* .custom-modal-dialog {
   max-width: 75%;
   overflow-y: scroll;
 } */
 
+.close-button {
+  color: white;
+  background-color: black;
+  border:1px solid black;
+  border-radius: 5px;
+  
+  font-weight: bold;
+  padding: 0;
+
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 30px;
+  font-size: 20px;
+}
 
 
 .btn{
@@ -298,12 +380,45 @@ width: 100%;
  }
 
  /* img{
-  border: 2px solid #000;
+  border: 1px solid #000;
   border-radius: .5rem;
+
  } */
 
  .red-icon {
   color: rgb(255, 0, 0);
+}
+
+.hebergementsAll__container__item{
+  cursor: pointer;
+}
+
+
+
+.react-datepicker__day--today-custom-1 {
+  background-color: inherit;
+}
+
+.react-datepicker__day--highlighted-custom-1 {
+  background-color: rgba(255, 0, 0, 0.5);
+}
+
+.react-datepicker__day-custom-1:hover {
+  background-color: inherit;
+  border-radius: 0;
+}
+
+.react-datepicker__navigation--previous {
+  border-right-color: #000000;
+}
+
+.react-datepicker__navigation--next {
+  border-left-color: #000000;
+}
+
+.react-datepicker__navigation--previous,
+.react-datepicker__navigation--next {
+    filter: brightness(0%);
 }
 
 

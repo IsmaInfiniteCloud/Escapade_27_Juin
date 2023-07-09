@@ -102,7 +102,7 @@ function Header() {
 
   return (
     <div>
-      <header className="header">
+      <header className="header container-fluid">
         <div className="container-fluid">
           <div className="container">
             <div className="row align-items-center">
@@ -219,14 +219,14 @@ function Header() {
       </header>
 
       <InscriptionModal
-        className="custom-modal"
+        className="custom-modal "
         isOpen={isInscriptionOpen}
         onClose={() => setIsInscriptionOpen(false)}
         onGoToConnexion={openConnexionModal}
         onServerMessage={handleServerMessage}
       />
       <ConnexionModal
-        className="custom-modal"
+        className="custom-modal "
         isOpen={isConnexionOpen}
         onClose={() => setIsConnexionOpen(false)}
         onSuccessfulLogin={handleSuccessfulLogin}
@@ -237,7 +237,7 @@ function Header() {
       />
 
       <EscapadeModal
-        className="custom-modal-dialog modal-dialog-scrollable"
+        className="custom-modal-dialog modal-dialog-scrollable "
         isOpen={isEscapadeOpen}
         onClose={() => setIsEscapadeOpen(false)}
         onGoToConnexion={openConnexionModal}

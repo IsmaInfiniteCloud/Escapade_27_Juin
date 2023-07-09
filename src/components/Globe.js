@@ -1,17 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useFrame } from "react-three-fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
+import { useThree } from "react-three-fiber";
 
 const Globe = ({ onAnimationEnd }) => {
   const modelRef = useRef();
   const [isRotating, setIsRotating] = useState(true);
   const [isFadeOut, setIsFadeOut] = useState(false);
+  const { camera } = useThree();
 
   useFrame(({ clock }) => {
     if (isRotating) {
       modelRef.current.rotation.y = clock.elapsedTime; // Rotation en fonction du temps écoulé
     }
   });
+
+  useEffect(() => {
+    camera.position.z = 5.5; // Déplace la caméra vers l'arrière
+  }, [camera]);
 
   useEffect(() => {
     const loader = new GLTFLoader();
