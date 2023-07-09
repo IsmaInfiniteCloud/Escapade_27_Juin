@@ -4,16 +4,22 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import fr from "date-fns/locale/fr";
+import ReservationModal from "../components/ReservationModal"
 registerLocale("fr", fr);
+
 
 //Modal.setAppElement("#root"); // Remplacez '#root' par l'id de l'élément racine de votre application
 
 function DetailsHebergementModal({ hebergement, onClose }) {
+  const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
+  const [selectedHebergement, setSelectedHebergement] = useState(null);
+ 
   const handleReserverClick = (event) => {
     event.preventDefault();
-    alert("C'est ici que nous affichons le formulaire de réservation");
-    onClose();
-  };
+  onClose();
+  setIsReservationFormOpen(true);
+ 
+};
 
   // Convertir les dates de réservation en objets Date pour le DatePicker
   // Convertir les dates de réservation en objets Date pour le DatePicker
@@ -134,6 +140,7 @@ function DetailsHebergementModal({ hebergement, onClose }) {
         Réserver
       </button>
     </Modal>
+    
   );
 }
 
