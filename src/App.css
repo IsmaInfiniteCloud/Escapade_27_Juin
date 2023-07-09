@@ -421,9 +421,20 @@ width: 100%;
     filter: brightness(0%);
 }
 
-
+.react-datepicker__day--selected, 
+.react-datepicker__day--selected:hover, 
+.react-datepicker__day--keyboard-selected, 
+.react-datepicker__day--keyboard-selected:hover {
+    background-color: transparent !important;
+    color: inherit !important;
+}
  
-
+.react-datepicker__day:hover, 
+.react-datepicker__day--keyboard-selected:hover {
+    background-color: transparent !important;
+    color: inherit !important;
+    border-radius: 0 !important;
+}
 
 
 
