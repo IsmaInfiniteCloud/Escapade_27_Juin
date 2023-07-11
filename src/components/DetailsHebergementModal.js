@@ -4,25 +4,23 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
 import fr from "date-fns/locale/fr";
-import ReservationModal from "../components/ReservationModal"
-registerLocale("fr", fr);
+import ReservationModal from "../components/ReservationModal";
 
+registerLocale("fr", fr);
 
 //Modal.setAppElement("#root"); // Remplacez '#root' par l'id de l'élément racine de votre application
 
 function DetailsHebergementModal({ hebergement, onClose }) {
   const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
   const [selectedHebergement, setSelectedHebergement] = useState(null);
- const [isReservationModal, setIsReservationModal] = useState(null);
- const [showReservationModal, setShowReservationModal] = useState(null);
+  const [isReservationModal, setIsReservationModal] = useState(null);
+  const [showReservationModal, setShowReservationModal] = useState(null);
 
- 
   const handleReserverClick = (event) => {
     event.preventDefault();
-  onClose();
-  setIsReservationFormOpen(true);
- 
-};
+    onClose();
+    setIsReservationFormOpen(true);
+  };
 
   // Convertir les dates de réservation en objets Date pour le DatePicker
   // Convertir les dates de réservation en objets Date pour le DatePicker
@@ -139,18 +137,15 @@ function DetailsHebergementModal({ hebergement, onClose }) {
         className="btn btn-dark my-3 mx-5 fw-bold"
         onClick={handleReserverClick}
         //onChangeRaw={(e) => e.preventDefault()}
-        
       >
         Réserver
       </button>
       <ReservationModal
-    isOpen={isReservationModal}
-    onRequestClose={() => setShowReservationModal(false)}
-    contentLabel="Success Modal"
-  ></ReservationModal>
-
+        isOpen={isReservationModal}
+        onRequestClose={() => setShowReservationModal(false)}
+        contentLabel="Success Modal"
+      ></ReservationModal>
     </Modal>
-    
   );
 }
 
