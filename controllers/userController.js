@@ -1,5 +1,7 @@
 const User = require("../models/User");
 const argon2 = require("argon2");
+
+
 exports.signUp = async (req, res) => {
   const { email, motDePasse, prenom, nom } = req.body;
 
@@ -72,6 +74,8 @@ exports.logout = (req, res) => {
     res.status(200).json({ message: "Déconnexion réussie" });
   });
 };
+
+//Modifier son mot de passe utilisateur
 
 exports.patchPassword = async (req, res) => {
   const id = req.params.id;

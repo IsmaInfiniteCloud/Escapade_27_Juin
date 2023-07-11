@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaGlobe } from "react-icons/fa";
 import { BiSearch, BiUser, BiMenu } from "react-icons/bi";
 import logo from "../images/escapade.png";
+import PassOublieModal from "./PassOublieModal";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import Modal from "react-modal";
@@ -13,6 +14,7 @@ function ConnexionModal({
   isOpen,
   onClose,
   onGoToInscription,
+  onGoPassOublie,
   onSuccessfulLogin,
   nextPopupToShow,
   onGoToEscapade,
@@ -66,6 +68,13 @@ function ConnexionModal({
 
     return errors;
   };
+
+  const handlePassOublie = (event) => {
+    event.preventDefault();
+    onClose();
+    resetForm();
+    onGoPassOublie();
+  }
 
   const handleInscriptionClick = (event) => {
     event.preventDefault();
@@ -150,9 +159,8 @@ function ConnexionModal({
           <input
             type="email"
             id="loginEmail"
-            className={`form-control ${
-              connexionFormErrors.email ? "is-invalid" : ""
-            }`}
+            className={`form-control ${connexionFormErrors.email ? "is-invalid" : ""
+              }`}
             placeholder="Entrez votre email"
             value={connexionFormValues.email}
             default=""
@@ -173,9 +181,8 @@ function ConnexionModal({
           <input
             type="password"
             id="loginPassword"
-            className={`form-control ${
-              connexionFormErrors.motDePasse ? "is-invalid" : ""
-            }`}
+            className={`form-control ${connexionFormErrors.motDePasse ? "is-invalid" : ""
+              }`}
             placeholder="Entrez votre mot de passe"
             value={connexionFormValues.motDePasse}
             default=""
@@ -203,11 +210,22 @@ function ConnexionModal({
             Se connecter
           </button>
           <p className="mb-0">
-            Pas inscrit ?{" "}
+
             <a href="#" onClick={handleInscriptionClick}>
               S'inscrire
+            </a> &nbsp;&nbsp;
+            <a href="#" onClick={handlePassOublie}>
+              Mot de passe oublié ?
             </a>
           </p>
+
+          {/* <p className="mb-0">
+
+            <a href="#" onClick={handlePassOublie}>
+              Mot de passe oublié ?
+            </a>
+          </p> */}
+
         </div>
       </form>
     </Modal>

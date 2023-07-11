@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import PassOublieModal from "./PassOublieModal";
 
 const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
 const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
@@ -18,6 +19,7 @@ function InscriptionModal({
   onGoToConnexion,
   onServerMessage,
 }) {
+  // const [isPassOublieModalOpen, setIsPassOublieModalOpen] = useState(false);
   const [formValues, setFormValues] = useState({
     prenom: "",
     nom: "",
@@ -87,6 +89,7 @@ function InscriptionModal({
     onGoToConnexion();
   };
 
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -141,120 +144,126 @@ function InscriptionModal({
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={() => {
-        onClose();
-        resetForm();
-      }}
-      className="custom-modal border border-dark"
-    >
-      <form onSubmit={handleSubmit} className="container w-75 px-0">
-        <h2>Inscription</h2>
-        <div className="form-group">
-          <label htmlFor="prenom">Prénom</label>
-          <input
-            type="text"
-            id="prenom"
-            className={`form-control ${formErrors.prenom ? "is-invalid" : ""}`}
-            placeholder="Entrez votre prénom"
-            value={formValues.prenom}
-            onChange={(e) =>
-              setFormValues({ ...formValues, prenom: e.target.value })
-            }
-            required
-          />
-          {formErrors.prenom && (
-            <div className="invalid-feedback">{formErrors.prenom}</div>
-          )}
-        </div>
-        <div className="form-group">
-          <label htmlFor="nom">Nom</label>
-          <input
-            type="text"
-            id="nom"
-            className={`form-control ${formErrors.nom ? "is-invalid" : ""}`}
-            placeholder="Entrez votre nom"
-            value={formValues.nom}
-            onChange={(e) =>
-              setFormValues({ ...formValues, nom: e.target.value })
-            }
-            required
-          />
-          {formErrors.nom && (
-            <div className="invalid-feedback">{formErrors.nom}</div>
-          )}
-        </div>
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            className={`form-control ${formErrors.email ? "is-invalid" : ""}`}
-            placeholder="Entrez votre email"
-            value={formValues.email}
-            onChange={(e) =>
-              setFormValues({ ...formValues, email: e.target.value })
-            }
-            required
-          />
-          {formErrors.email && (
-            <div className="invalid-feedback">{formErrors.email}</div>
-          )}
-        </div>
+    <>
 
-        <div className="form-group">
-          <label htmlFor="motDePasse">Mot de passe</label>
-          <input
-            type="password"
-            id="motDePasse"
-            className={`form-control ${
-              formErrors.motDePasse ? "is-invalid" : ""
-            }`}
-            placeholder="Entrez votre mot de passe"
-            value={formValues.motDePasse}
-            onChange={(e) =>
-              setFormValues({ ...formValues, motDePasse: e.target.value })
-            }
-            required
-          />
-          {formErrors.motDePasse && (
-            <div className="invalid-feedback">{formErrors.motDePasse}</div>
-          )}
-        </div>
-        <div className="form-group">
-          <label htmlFor="repete_passe">Validation</label>
-          <input
-            type="password"
-            id="repete_passe"
-            className={`form-control ${
-              formErrors.repete_passe ? "is-invalid" : ""
-            }`}
-            placeholder="Répétez votre mot de passe"
-            value={formValues.repete_passe}
-            onChange={(e) =>
-              setFormValues({ ...formValues, repete_passe: e.target.value })
-            }
-            required
-          />
-          {formErrors.repete_passe && (
-            <div className="invalid-feedback">{formErrors.repete_passe}</div>
-          )}
-        </div>
-        <div className="d-flex justify-content-between align-items-center mt-4">
-          <button type="submit" className="btn btn-dark" onClick={handleSubmit}>
-            S'inscrire
-          </button>
-          <p className="mb-0">
-            Déjà inscrit ?{" "}
-            <a href="#" onClick={handleInscriptionClick}>
-              Se connecter
-            </a>
-          </p>
-        </div>
-      </form>
-    </Modal>
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={() => {
+          onClose();
+          resetForm();
+        }}
+        className="custom-modal border border-dark"
+      >
+        <form onSubmit={handleSubmit} className="container w-75 px-0">
+          <h2>Inscription</h2>
+          <div className="form-group">
+            <label htmlFor="prenom">Prénom</label>
+            <input
+              type="text"
+              id="prenom"
+              className={`form-control ${formErrors.prenom ? "is-invalid" : ""}`}
+              placeholder="Entrez votre prénom"
+              value={formValues.prenom}
+              onChange={(e) =>
+                setFormValues({ ...formValues, prenom: e.target.value })
+              }
+              required
+            />
+            {formErrors.prenom && (
+              <div className="invalid-feedback">{formErrors.prenom}</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="nom">Nom</label>
+            <input
+              type="text"
+              id="nom"
+              className={`form-control ${formErrors.nom ? "is-invalid" : ""}`}
+              placeholder="Entrez votre nom"
+              value={formValues.nom}
+              onChange={(e) =>
+                setFormValues({ ...formValues, nom: e.target.value })
+              }
+              required
+            />
+            {formErrors.nom && (
+              <div className="invalid-feedback">{formErrors.nom}</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              className={`form-control ${formErrors.email ? "is-invalid" : ""}`}
+              placeholder="Entrez votre email"
+              value={formValues.email}
+              onChange={(e) =>
+                setFormValues({ ...formValues, email: e.target.value })
+              }
+              required
+            />
+            {formErrors.email && (
+              <div className="invalid-feedback">{formErrors.email}</div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="motDePasse">Mot de passe</label>
+            <input
+              type="password"
+              id="motDePasse"
+              className={`form-control ${formErrors.motDePasse ? "is-invalid" : ""
+                }`}
+              placeholder="Entrez votre mot de passe"
+              value={formValues.motDePasse}
+              onChange={(e) =>
+                setFormValues({ ...formValues, motDePasse: e.target.value })
+              }
+              required
+            />
+            {formErrors.motDePasse && (
+              <div className="invalid-feedback">{formErrors.motDePasse}</div>
+            )}
+          </div>
+          <div className="form-group">
+            <label htmlFor="repete_passe">Validation</label>
+            <input
+              type="password"
+              id="repete_passe"
+              className={`form-control ${formErrors.repete_passe ? "is-invalid" : ""
+                }`}
+              placeholder="Répétez votre mot de passe"
+              value={formValues.repete_passe}
+              onChange={(e) =>
+                setFormValues({ ...formValues, repete_passe: e.target.value })
+              }
+              required
+            />
+            {formErrors.repete_passe && (
+              <div className="invalid-feedback">{formErrors.repete_passe}</div>
+            )}
+          </div>
+          <div className="d-flex justify-content-between align-items-center mt-4">
+            <button type="submit" className="btn btn-dark" onClick={handleSubmit}>
+              S'inscrire
+            </button>
+            <p className="mb-0">
+              Déjà inscrit ?{" "}
+              <a href="#" onClick={handleInscriptionClick}>
+                Se connecter
+              </a>
+            </p>
+          </div>
+        </form>
+      </Modal>
+
+
+
+    </>
   );
+
+
 }
 
 export default InscriptionModal;
