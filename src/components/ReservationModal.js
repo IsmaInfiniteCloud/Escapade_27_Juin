@@ -14,10 +14,11 @@ const ReservationModal = ({ hebergement, onClose, isReservationFormOpen }) => {
     console.log("Date de fin :", endDate);
     onClose();
   };
-  //alert("je devrais afficher le modal");
+
   return (
     <div className="reservation-modal">
-      <h2>Réserver {hebergement.titre}</h2>
+      <h2>Réserver </h2>
+      {/* <h2>Réserver {hebergement.titre}</h2> */}
       <form onSubmit={handleFormSubmit}>
         <div>
           <label>Date de début :</label>
