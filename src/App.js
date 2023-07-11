@@ -65,7 +65,7 @@ const App = () => {
   return (
     <div className="app">
       <Header />
-      onGoToPassOublie={goToPassOublie}
+
       {isModelVisible && (
         <div className="canvas-container">
           <Canvas>

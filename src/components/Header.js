@@ -8,6 +8,7 @@ import InscriptionModal from "./InscriptionModal";
 import ConnexionModal from "./ConnexionModal";
 import EscapadeModal from "./EscapadeModal";
 import MessageModal from "./MessageModal";
+import PassOublieModal from "./PassOublieModal";
 import Modal from "react-modal";
 
 Modal.setAppElement("#root");
@@ -53,12 +54,6 @@ function Header() {
     setIsInscriptionOpen(false);
     setIsConnexionOpen(true);
   };
-
-  // const handleConnexionClick = (event) => {
-  //   event.preventDefault();
-  //   setIsInscriptionOpen(false);
-  //   setIsConnexionOpen(true);
-  // };
 
   const handleEscapadeClick = (event) => {
     event.preventDefault();
@@ -264,6 +259,14 @@ function Header() {
         {/* <p>Bienvenue sur Escapade!</p> */}
         {/* <button onClick={() => setShowSuccessModal(false)}>Fermer</button> */}
       </Modal>
+
+      <PassOublieModal
+        className="custom-modal "
+        isOpen={isPassOublieOpen}
+        onClose={() => setIsPassOublieOpen(false)}
+        onGoToConnexion={openConnexionModal}
+        onServerMessage={handleServerMessage}
+      />
     </div>
   );
 }
