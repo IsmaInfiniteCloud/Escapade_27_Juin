@@ -13,6 +13,9 @@ registerLocale("fr", fr);
 function DetailsHebergementModal({ hebergement, onClose }) {
   const [isReservationFormOpen, setIsReservationFormOpen] = useState(false);
   const [selectedHebergement, setSelectedHebergement] = useState(null);
+ const [isReservationModal, setIsReservationModal] = useState(null);
+ const [showReservationModal, setShowReservationModal] = useState(null);
+
  
   const handleReserverClick = (event) => {
     event.preventDefault();
@@ -136,9 +139,16 @@ function DetailsHebergementModal({ hebergement, onClose }) {
         className="btn btn-dark my-3 mx-5 fw-bold"
         onClick={handleReserverClick}
         //onChangeRaw={(e) => e.preventDefault()}
+        
       >
         Réserver
       </button>
+      <ReservationModal
+    isOpen={isReservationModal}
+    onRequestClose={() => setShowReservationModal(false)}
+    contentLabel="Success Modal"
+  ></ReservationModal>
+
     </Modal>
     
   );

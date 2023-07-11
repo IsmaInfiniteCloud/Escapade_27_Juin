@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-const ReservationModal = ({ hebergement, onClose }) => {
+const ReservationModal = ({ hebergement, onClose, isReservationFormOpen }) => {
+
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
 
@@ -12,7 +13,7 @@ const ReservationModal = ({ hebergement, onClose }) => {
     console.log('Date de fin :', endDate);
     onClose();
   };
-
+alert("je devrais afficher le modal");
   return (
     <div className="reservation-modal">
       <h2>Réserver {hebergement.titre}</h2>
