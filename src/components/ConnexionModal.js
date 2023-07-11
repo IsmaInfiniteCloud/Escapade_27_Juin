@@ -212,11 +212,11 @@ function ConnexionModal({
             Se connecter
           </button>
           <p className="mb-0">
-            <a href="#" onClick={handleInscriptionClick}>
+            <a href="#" className="me-3" onClick={handleInscriptionClick}>
               S'inscrire
             </a>{" "}
             &nbsp;&nbsp;
-            <a href="#" onClick={handlePassOublie} className="me-2">
+            <a href="#" onClick={handlePassOublie}>
               Mot de passe oublié ?
             </a>
           </p>
