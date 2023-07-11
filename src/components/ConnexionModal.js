@@ -17,7 +17,15 @@ function ConnexionModal({
   nextPopupToShow,
   onGoToEscapade,
   onServerMessage,
+  onGoToPassOublie,
 }) {
+  const handlePassOublieClick = (event) => {
+    event.preventDefault();
+    onClose();
+    resetForm();
+    onGoToPassOublie(); // appelle le callback
+  };
+
   const [connexionFormValues, setConnexionFormValues] = useState({
     email: "",
     motDePasse: "",
@@ -203,9 +211,14 @@ function ConnexionModal({
             Se connecter
           </button>
           <p className="mb-0">
-            Pas inscrit ?{" "}
             <a href="#" onClick={handleInscriptionClick}>
               S'inscrire
+            </a>
+          </p>
+
+          <p className="mb-0">
+            <a href="#" onClick={handlePassOublieClick}>
+              Mot de passe oublié?
             </a>
           </p>
         </div>
