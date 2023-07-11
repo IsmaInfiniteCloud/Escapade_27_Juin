@@ -17,6 +17,7 @@ function Header() {
   const [isConnexionOpen, setIsConnexionOpen] = useState(false);
   const [isEscapadeOpen, setIsEscapadeOpen] = useState(false);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const [isPassOublieOpen, setIsPassOublieOpen] = useState(false);
   const [PopupToShow, setPopupToShow] = useState(null);
   const [userData, setUserData] = useState(null);
   const [isUserId, setIsUserId] = useState(null);
@@ -53,11 +54,11 @@ function Header() {
     setIsConnexionOpen(true);
   };
 
-  const handleConnexionClick = (event) => {
-    event.preventDefault();
-    setIsInscriptionOpen(false);
-    setIsConnexionOpen(true);
-  };
+  // const handleConnexionClick = (event) => {
+  //   event.preventDefault();
+  //   setIsInscriptionOpen(false);
+  //   setIsConnexionOpen(true);
+  // };
 
   const handleEscapadeClick = (event) => {
     event.preventDefault();
@@ -71,6 +72,12 @@ function Header() {
     } else {
       setIsEscapadeOpen(true);
     }
+  };
+
+  const openPassOublieModal = () => {
+    setIsPassOublieOpen(true);
+    setIsInscriptionOpen(false);
+    setIsConnexionOpen(false);
   };
 
   const openInscriptionModal = () => {
@@ -234,6 +241,7 @@ function Header() {
         nextPopupToShow={PopupToShow}
         onGoToEscapade={openEscapadeModal}
         onServerMessage={handleServerMessage}
+        onGoToPassOublie={openPassOublieModal}
       />
 
       <EscapadeModal

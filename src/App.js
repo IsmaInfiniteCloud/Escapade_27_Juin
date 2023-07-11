@@ -8,6 +8,7 @@ import Header from "./components/Header";
 import axios from "axios";
 import { getGeolocation } from "./components/GeolocationComponent";
 import DetailsHebergementModal from "./components/DetailsHebergementModal";
+import PassOublieModal from "./components/PassOublieModal";
 
 const App = () => {
   const [isModelVisible, setIsModelVisible] = useState(true);
@@ -19,10 +20,15 @@ const App = () => {
   const [isDetailsHebergementModalOpen, setIsDetailsHebergementModalOpen] =
     useState(false);
   const [selectedHebergement, setSelectedHebergement] = useState(null);
+  const [isPassOublieOpen, setIsPassOublieOpen] = useState(false);
 
   const handleCardClick = (hebergement) => {
     setSelectedHebergement(hebergement);
     setIsDetailsHebergementModalOpen(true);
+  };
+
+  const goToPassOublie = () => {
+    setIsPassOublieOpen(true);
   };
 
   useEffect(() => {
@@ -59,7 +65,7 @@ const App = () => {
   return (
     <div className="app">
       <Header />
-
+      onGoToPassOublie={goToPassOublie}
       {isModelVisible && (
         <div className="canvas-container">
           <Canvas>
@@ -129,7 +135,6 @@ const App = () => {
           </div>
         </div>
       )}
-
       {isDetailsHebergementModalOpen && (
         <DetailsHebergementModal
           hebergement={selectedHebergement}
