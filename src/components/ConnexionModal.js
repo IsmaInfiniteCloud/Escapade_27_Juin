@@ -74,7 +74,7 @@ function ConnexionModal({
     onClose();
     resetForm();
     onGoPassOublie();
-  }
+  };
 
   const handleInscriptionClick = (event) => {
     event.preventDefault();
@@ -159,8 +159,9 @@ function ConnexionModal({
           <input
             type="email"
             id="loginEmail"
-            className={`form-control ${connexionFormErrors.email ? "is-invalid" : ""
-              }`}
+            className={`form-control ${
+              connexionFormErrors.email ? "is-invalid" : ""
+            }`}
             placeholder="Entrez votre email"
             value={connexionFormValues.email}
             default=""
@@ -181,8 +182,9 @@ function ConnexionModal({
           <input
             type="password"
             id="loginPassword"
-            className={`form-control ${connexionFormErrors.motDePasse ? "is-invalid" : ""
-              }`}
+            className={`form-control ${
+              connexionFormErrors.motDePasse ? "is-invalid" : ""
+            }`}
             placeholder="Entrez votre mot de passe"
             value={connexionFormValues.motDePasse}
             default=""
@@ -210,11 +212,11 @@ function ConnexionModal({
             Se connecter
           </button>
           <p className="mb-0">
-
             <a href="#" onClick={handleInscriptionClick}>
               S'inscrire
-            </a> &nbsp;&nbsp;
-            <a href="#" onClick={handlePassOublie}>
+            </a>{" "}
+            &nbsp;&nbsp;
+            <a href="#" onClick={handlePassOublie} className="me-2">
               Mot de passe oublié ?
             </a>
           </p>
@@ -225,7 +227,6 @@ function ConnexionModal({
               Mot de passe oublié ?
             </a>
           </p> */}
-
         </div>
       </form>
     </Modal>
