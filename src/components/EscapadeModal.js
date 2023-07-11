@@ -18,7 +18,16 @@ function EscapadeModal({
   isUserId,
   onServerMessage,
 }) {
-  const [startDate, setStartDate] = useState(null);
+  function range(start, end, step) {
+    let arr = [];
+    for (let i = start; i < end; i += step) {
+      arr.push(i);
+    }
+    return arr;
+  }
+
+  let currentYear = new Date().getFullYear();
+  let years = range(currentYear, currentYear + 10, 1);
   const [endDate, setEndDate] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
   const [isEscapadeOpen, setIsEscapadeOpen] = useState(false);
@@ -586,11 +595,14 @@ function EscapadeModal({
             <div className="form-group">
               <label htmlFor="blockedDates">Bloquer des dates</label>
               <DatePicker
+                className="blocked-dates-datepicker"
                 id="blockedDates"
                 locale="fr"
+                //showYearDropdown={true}
                 selected={null}
                 onChange={(dates) => setSelectedDates(dates)}
                 selectsRange
+                monthsShown={3}
                 startDate={selectedDates[0]}
                 endDate={selectedDates[1]}
                 inline

@@ -115,6 +115,7 @@ function DetailsHebergementModal({ hebergement, onClose }) {
         </div>
         <h3>Disponibilités</h3>
         <DatePicker
+          className="highlight-dates-datepicker"
           inline
           locale="fr"
           selected={null}
