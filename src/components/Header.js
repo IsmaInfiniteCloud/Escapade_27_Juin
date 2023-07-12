@@ -26,7 +26,7 @@ function Header() {
   const [isShowMessageModal, setShowMessageModal] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
   ////////////////////////////////////////////////
-  const [isReserverOpen, setIsReserverOpen] = useState(true);
+  const [isReserverOpen, setIsReserverOpen] = useState(false);
   ////////////////////////////////////////////////
   useEffect(() => {
     if (serverMessage) {

@@ -26,7 +26,7 @@ const App = () => {
   const [isReserverOpen, setIsReserverOpen] = useState(true);
   const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
   ////////////////////////////////////////////
-  const [isReserverModalOpen, setIsReserverModalOpen] = useState(true);
+  const [isReserverModalOpen, setIsReserverModalOpen] = useState(false);
   ////////////////////////////////////////////
   const [isConnexionModalOpen, setIsConnexionModalOpen] = useState(false);
 

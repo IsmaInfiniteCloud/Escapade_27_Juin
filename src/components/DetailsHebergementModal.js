@@ -11,7 +11,7 @@ registerLocale("fr", fr);
 
 function DetailsHebergementModal({ hebergement, onClose, onGoToReserver }) {
   ///////////////////////////////////////////////////////////
-  const [reserverModalOpen, setReserverModalOpen] = useState(true);
+  const [reserverModalOpen, setReserverModalOpen] = useState(false);
   ///////////////////////////////////////////////////////////
   const handleReserverClick = (event) => {
     event.preventDefault();
