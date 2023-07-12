@@ -20,6 +20,7 @@ function ConnexionModal({
   onGoToEscapade,
   onServerMessage,
 }) {
+  
   const [connexionFormValues, setConnexionFormValues] = useState({
     email: "",
     motDePasse: "",

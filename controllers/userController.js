@@ -75,32 +75,64 @@ exports.logout = (req, res) => {
   });
 };
 
-//Modifier son mot de passe utilisateur
+exports.getUserByEmail = async (req, res) => {
+  const email = req.params.email;
 
-exports.patchPassword = async (req, res) => {
-  const id = req.params.id;
-  let updateData = req.body;
+  try {
+    const user = await User.findOne({ email: email });
 
-  // Si le mot de passe est mis à jour, le hacher à nouveau avant de sauvegarder
-  if (updateData.motDePasse) {
-    updateData.motDePasse = await argon2.hash(updateData.motDePasse);
-  }
-
-  User.findByIdAndUpdate(id, updateData, { new: true }, (err, user) => {
-    if (err) {
-      return res.status(500).json({
-        message:
-          "Erreur lors de la mise à jour des informations de l'utilisateur",
-      });
-    }
     if (!user) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
     return res.status(200).json({
-      message: "Informations de l'utilisateur mises à jour avec succès",
+      message: "Informations de l'utilisateur récupérées avec succès",
       user,
     });
-  });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Erreur lors de la récupération des informations de l'utilisateur",
+    });
+  }
+};
+
+//Modifier son mot de passe utilisateur
+
+exports.patchPassword = async (req, res) => {
+  const email = req.body.email;
+  const newPassword = req.body.newPassword;
+  const confirmPassword = req.body.confirmPassword;
+
+  // Check if the new password and confirm password are same
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ message: "Passwords do not match" });
+  }
+
+  try {
+    // Check for the user with the given email
+    const user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If the user is found, hash the new password and update it
+    const hashedPassword = await argon2.hash(newPassword);
+
+    const updatedUser = await User.findByIdAndUpdate(user.id, { motDePasse: hashedPassword }, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User password updated successfully",
+      updatedUser,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error when updating the user's password",
+    });
+  }
 };
 // fait par Pascal
 exports.patchEmail = async (req, res) => {
