@@ -4,26 +4,28 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        // Installer Node.js v16.13
-        sh 'nvm install 16.13'
-        // Utiliser Node.js v16.13 pour cette étape
-        sh '/home/ismail/.nvm/versions/node/16.13/bin/npm ci'
-        sh '/home/ismail/.nvm/versions/node/16.13/bin/npm run build'
+        // Install n (Node.js version manager)
+        sh 'npm install -g n'
+        // Install Node.js v16.13
+        sh 'n 16.13.0'
+        // Use Node.js v16.13 for this stage
+        sh 'npm ci'
+        sh 'npm run build'
       }
     }
     
     stage('Test') {
       steps {
-        // Utiliser Node.js v16.13 pour cette étape
-        sh '/home/ismail/.nvm/versions/node/16.13/bin/npm run test'
+        // Use Node.js v16.13 for this stage
+        sh 'npm run test'
       }
     }
 
     stage('Deploy') {
       steps {
-        // Utiliser Node.js v16.13 pour cette étape
-        sh '/home/ismail/.nvm/versions/node/16.13/bin/npm install -g surge' // Installer Surge pour le déploiement
-        sh '/home/ismail/.nvm/versions/node/16.13/bin/surge --project ./build --domain localhost:3000' 
+        // Use Node.js v16.13 for this stage
+        sh 'npm install -g surge' // Install Surge for deployment
+        sh 'surge --project ./build --domain localhost:3000' 
       }
     }
   }
