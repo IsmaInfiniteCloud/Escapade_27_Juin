@@ -4,11 +4,14 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        // Install n (Node.js version manager) locally
-        sh 'npm install n'
+        // Install n (Node.js version manager) globally
+        sh 'sudo npm install -g n'
         // Install Node.js v18.16.1
-        sh 'n 18.16.1'
-        // Use Node.js v18.16.1 for this stage
+        sh 'sudo n 18.16.1'
+        // Verify the Node.js and npm version
+        sh 'node --version'
+        sh 'npm --version'
+        // Install dependencies and build the project
         sh 'npm ci'
         sh 'npm run build'
       }
@@ -16,15 +19,15 @@ pipeline {
     
     stage('Test') {
       steps {
-        // Use Node.js v18.16.1 for this stage
+        // Run tests
         sh 'npm run test'
       }
     }
 
     stage('Deploy') {
       steps {
-        // Use Node.js v18.16.1 for this stage
-        sh 'npm install -g surge' // Install Surge for deployment
+        // Install Surge for deployment
+        sh 'sudo npm install -g surge'
         sh 'surge --project ./build --domain localhost:3000' 
       }
     }
