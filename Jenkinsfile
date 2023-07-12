@@ -4,8 +4,8 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        // Install n (Node.js version manager)
-        sh 'npm install -g n'
+        // Install n (Node.js version manager) locally
+        sh 'npm install n'
         // Install Node.js v16.13
         sh 'n 16.13.0'
         // Use Node.js v16.13 for this stage
