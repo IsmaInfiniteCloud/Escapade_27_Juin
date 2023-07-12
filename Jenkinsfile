@@ -11,6 +11,7 @@ pipeline {
         // Verify the Node.js and npm version
         sh 'node --version'
         sh 'npm --version'
+        sh 'npm config set fetch-retry-maxtimeout 600000'
         // Install dependencies and build the project
         sh 'npm ci'
         sh 'npm run build'
