@@ -73,61 +73,59 @@ exports.logout = (req, res) => {
   });
 };
 
-exports.patchPassword = async (req, res) => {
-  const id = req.params.id;
-  let updateData = req.body;
+exports.getUserByEmail = async (req, res) => {
+  const email = req.params.email;
 
-  // Si le mot de passe est mis à jour, le hacher à nouveau avant de sauvegarder
-  if (updateData.motDePasse) {
-    updateData.motDePasse = await argon2.hash(updateData.motDePasse);
-  }
+  try {
+    const user = await User.findOne({ email: email });
 
-  User.findByIdAndUpdate(id, updateData, { new: true }, (err, user) => {
-    if (err) {
-      return res.status(500).json({
-        message:
-          "Erreur lors de la mise à jour des informations de l'utilisateur",
-      });
-    }
     if (!user) {
       return res.status(404).json({ message: "Utilisateur non trouvé" });
     }
     return res.status(200).json({
-      message: "Informations de l'utilisateur mises à jour avec succès",
+      message: "Informations de l'utilisateur récupérées avec succès",
       user,
     });
-  });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Erreur lors de la récupération des informations de l'utilisateur",
+    });
+  }
 };
+exports.patchPassword = async (req, res) => {
+  const email = req.body.email;
+  const newPassword = req.body.motDePasse;
+  const confirmPassword = req.body.repete_passe;
 
-exports.patchEmail = async (req, res) => {
-  const id = req.params.id;
-  const newEmail = req.body.email;
-
-  // Vérifier si l'email est déjà utilisé
-  const emailExists = await User.findOne({ email: newEmail });
-  if (emailExists) {
-    return res.status(400).json({ message: "Cet email est déjà utilisé" });
+  // Check if the new password and confirm password are same
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ message: "Passwords do not match" });
   }
 
-  User.findByIdAndUpdate(
-    id,
-    { email: newEmail },
-    { new: true },
-    (err, user) => {
-      if (err) {
-        return res.status(500).json({
-          message: "Erreur lors de la mise à jour de l'email de l'utilisateur",
-        });
-      }
-      if (!user) {
-        return res.status(404).json({ message: "Utilisateur non trouvé" });
-      }
-      return res.status(200).json({
-        message: "Email de l'utilisateur mis à jour avec succès",
-        user,
-      });
-    }
-  );
-};
+  try {
+    // Check for the user with the given email
+    const user = await User.findOne({ email: email });
 
-//Update User/gerer profil
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // If the user is found, hash the new password and update it
+    const hashedPassword = await argon2.hash(newPassword);
+
+    const updatedUser = await User.findByIdAndUpdate(user.id, { motDePasse: hashedPassword }, { new: true });
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User password updated successfully",
+      updatedUser,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: "Error when updating the user's password",
+    });
+  }
+};
