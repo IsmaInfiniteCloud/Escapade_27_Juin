@@ -20,6 +20,7 @@ function PassOublieModal({
   onGoPassOublie,
 }) {
   const [formValues, setFormValues] = useState({
+    email:"",
     motDePasse: "",
     repete_passe: "",
   });
@@ -31,6 +32,7 @@ function PassOublieModal({
 
   const resetForm = () => {
     setFormValues({
+      email: "",
       motDePasse: "",
       repete_passe: "",
     });
@@ -43,6 +45,11 @@ function PassOublieModal({
     if (!passwordRegex.test(formValues.motDePasse)) {
       errors.motDePasse =
         "Le mot de passe doit comporter au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial";
+    }
+
+    if(!emailRegex.test(formValues.email)){
+      errors.email = "Veuillez entrer une adresse email valide. "
+
     }
 
     // Vérification de l'égalité entre le mot de passe et sa répétition
@@ -122,7 +129,51 @@ function PassOublieModal({
     >
       <form onSubmit={handleSubmit} className="container w-75 px-0">
         <h2>Nouveau mot de passe</h2>
+        <div className="form-group">
 
+<label htmlFor="loginEmail">Email</label>
+
+<input
+
+  type="email"
+
+  id="loginEmail"
+
+  className={`form-control ${
+
+    formErrors.email ? "is-invalid" : ""
+
+  }`}
+
+  placeholder="Entrez votre email"
+
+  value={formValues.email}
+
+  default=""
+
+  onChange={(e) =>
+
+    setFormValues({
+
+      ...formValues,
+
+      email: e.target.value,
+
+    })
+
+  }
+
+  required
+
+/>
+
+{formErrors.email && (
+
+  <div className="invalid-feedback">{formErrors.email}</div>
+
+)}
+
+</div>
         <div className="form-group">
           <label htmlFor="motDePasse">Mot de passe</label>
           <input
