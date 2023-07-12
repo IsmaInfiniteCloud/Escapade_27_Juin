@@ -1,365 +1,139 @@
 import React, { useState } from "react";
-import "./ReserverModal";
-import "./DetailsHebergementModal";
-import "./ConnexionModal";
+import Modal from "react-modal";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import Modal from "react-modal";
-import axios from "axios";
 
-function ReserverModal({ hebergement, onClose }) {
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+function ReserverModal({ hebergement, isOpen, onClose }) {
+  const [reservationValues, setReservationValues] = useState({
+    nbPersonnes: "",
+  });
+
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [blockedDates, setBlockedDates] = useState([]);
 
   const handleFormSubmit = (event) => {
     event.preventDefault();
-    // Effectuer des actions avec les dates de réservation
-    // par exemple, envoyer les données au serveur, etc.
-    console.log("Date de début :", startDate);
-    console.log("Date de fin :", endDate);
+
+    // Logic here...
+    console.log(reservationValues, selectedDates);
     onClose();
   };
 
   return (
-    <div>
-      {/* Modal content and form */}
-      <Modal
-        scrollable={true}
-        className="custom-dialog-modal  modal-dialog-scrollable border border-dark"
-        // className="custom-modal"
-        //isOpen={isOpen}
-        onRequestClose={() => {
-          onClose();
-          // resetForm();
-        }}
-      >
-        <div
-          className="modal-header"
-          style={{ position: "sticky", top: 0, zIndex: 1 }}
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onClose}
+      className="reservationModal border border-dark"
+      style={{
+        overlay: {
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        },
+        content: {
+          position: "relative",
+          paddingBottom: "15px",
+        },
+      }}
+    >
+      <div style={{ position: "relative" }}>
+        <button
+          style={{ position: "absolute", top: "-10px", right: 0 }}
+          variant="dark"
+          onClick={onClose}
+          className="close-button me-4  mb-2"
         >
-          <h2 className="modal-title ms-5 mt-4  mb-2 fs-2">
-            Créer une Escapade
-          </h2>
-          <div className="modal-header d-flex justify-content-between align-items-center">
+          X
+        </button>
+
+        <form onSubmit={handleFormSubmit} className="container mx-auto px-5 ">
+          <h2 className="mb-3 mt-2 fs-2">Réserver</h2>
+          <div className="form-group">
+            <label htmlFor="nbPersonnes">Nombre de personnes</label>
+            <input
+              type="number"
+              id="nbPersonnes"
+              className="form-control mb-2"
+              style={{ width: "60%" }}
+              placeholder="Entrez le nombre de personnes"
+              value={reservationValues.nbPersonnes}
+              onChange={(e) =>
+                setReservationValues({
+                  ...reservationValues,
+                  nbPersonnes: e.target.value,
+                })
+              }
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="selectedDates">Choisir vos dates</label>
+            <DatePicker
+              className="blocked-dates-datepicker"
+              id="selectedDates"
+              locale="fr"
+              selected={null}
+              onChange={(dates) => setSelectedDates(dates)}
+              selectsRange
+              monthsShown={2}
+              startDate={selectedDates[0]}
+              endDate={selectedDates[1]}
+              inline
+              multiple
+            />
+
             <button
-              variant="dark"
-              onClick={onClose}
-              className="close-button me-4 mt-4 mb-2"
+              type="submit"
+              className="btn btn-dark my-3"
+              onClick={() => {
+                if (selectedDates.length !== 2) {
+                  console.log(
+                    "Veuillez sélectionner une plage de dates valide."
+                  );
+                  return;
+                }
+
+                const startDate = new Date(selectedDates[0]);
+                const endDate = new Date(selectedDates[1]);
+
+                if (endDate < startDate) {
+                  console.log(
+                    "La date de fin doit être postérieure à la date de début."
+                  );
+                  return;
+                }
+
+                const blockedDateList = [];
+                const currentDate = new Date(startDate);
+
+                while (currentDate <= endDate) {
+                  const formattedDate = currentDate.toLocaleDateString(
+                    "fr-CA",
+                    {
+                      dateStyle: "short",
+                    }
+                  );
+                  blockedDateList.push(formattedDate);
+                  currentDate.setDate(currentDate.getDate() + 1);
+                }
+
+                setBlockedDates((prevBlockedDates) => [
+                  ...prevBlockedDates,
+                  ...blockedDateList,
+                ]);
+
+                setSelectedDates([]);
+              }}
             >
-              X
+              Soumettre
             </button>
           </div>
-        </div>
-        <hr />
-        <div
-          className="modal-body"
-          style={{ maxHeight: "60vh", overflowY: "auto" }}
-        >
-          {" "}
-          <form onSubmit={handleFormSubmit} className="container mx-auto  px-5">
-            {/* <h2 className="mb-4 ">Créer une Escapade</h2> */}
-            {/* Escapade form fields */}
-            <div className="form-group">
-              <label htmlFor="reserver">Réserver</label>
-
-              {/* {escapadeFormErrors.titre && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.titre}
-                </div>
-              )} */}
-            </div>
-            {/* <div className="form-group">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.description ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez la description de votre escapade"
-                value={escapadeFormValues.description}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    description: e.target.value,
-                  })
-                }
-                required
-              />
-              {escapadeFormErrors.description && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.description}
-                </div>
-              )}
-            </div> */}
-
-            {/* <div className="form-group">
-              <label htmlFor="categorie">Catégorie</label>
-              <select
-                id="categorie"
-                className="form-control mb-2"
-                value={escapadeFormValues.selectOption}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    categorie: e.target.value,
-                  })
-                }
-              >
-                <option value="Chalet" selected>
-                  Chalet
-                </option>
-                <option value="Appartement">Appartement</option>
-                <option value="Maison">Maison</option>
-              </select>
-            </div> */}
-
-            {/* <div className="form-group">
-              <label htmlFor="adresse">Adresse</label>
-              <input
-                type="text"
-                id="adresse"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.adresse ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez l'adresse de votre escapade"
-                value={escapadeFormValues.adresse}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    adresse: e.target.value,
-                  })
-                }
-                required
-              />
-              {escapadeFormErrors.adresse && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.adresse}
-                </div>
-              )}
-            </div> */}
-
-            {/* <div className="form-group">
-              <label htmlFor="ville">Ville</label>
-              <input
-                type="text"
-                id="ville"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.ville ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez la ville de votre escapade"
-                value={escapadeFormValues.ville}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    ville: e.target.value,
-                  })
-                }
-                required
-              />
-              {escapadeFormErrors.ville && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.ville}
-                </div>
-              )}
-            </div> */}
-
-            {/* <div className="form-group">
-              <label htmlFor="codepostal">Code postal</label>
-              <input
-                type="text"
-                id="codepostal"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.codepostal ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez le code postal de votre escapade"
-                value={escapadeFormValues.codepostal}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    codepostal: e.target.value,
-                  })
-                }
-                required
-              />
-              {escapadeFormErrors.codepostal && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.codepostal}
-                </div>
-              )}
-            </div> */}
-
-            {/* <div className="form-group">
-              <label htmlFor="pays">Pays</label>
-              <input
-                type="text"
-                id="pays"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.pays ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez le pays de votre escapade"
-                value={escapadeFormValues.pays}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    pays: e.target.value,
-                  })
-                }
-                required
-              />
-              {escapadeFormErrors.pays && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.pays}
-                </div>
-              )}
-            </div> */}
-
-            {/* <div className="form-group">
-              <label htmlFor="nbChambres">Nombre de chambres</label>
-              <input
-                type="number"
-                id="nbChambres"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.nbChambres ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez le nombre de chambres de votre escapade"
-                value={escapadeFormValues.nbChambres}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    nbChambres: e.target.value,
-                  })
-                }
-                required
-              />
-              {escapadeFormErrors.nbChambres && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.nbChambres}
-                </div>
-              )}
-            </div> */}
-
-            <div className="form-group">
-              <label htmlFor="nbSallesDeBain">Nombre de salles de bain</label>
-              <input
-                type="number"
-                id="nbSallesDeBain"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.nbSallesDeBain ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez le nombre de salles de bain de votre escapade"
-                value={escapadeFormValues.nbSallesDeBain}
-                onChange={(e) => {
-                  let number = Number(e.target.value.replace(",", "."));
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    nbSallesDeBain: number,
-                  });
-                }}
-                required
-              />
-              {escapadeFormErrors.nbSallesDeBain && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.nbSallesDeBain}
-                </div>
-              )}
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="nbPersonnesMax">
-                Nombre de personnes maximum
-              </label>
-              <input
-                type="number"
-                id="nbPersonnesMax"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.nbPersonnesMax ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez le nombre de personnes maximum de votre escapade"
-                value={escapadeFormValues.nbPersonnesMax}
-                onChange={(e) =>
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    nbPersonnesMax: e.target.value,
-                  })
-                }
-                required
-              />
-              {escapadeFormErrors.nbPersonnesMax && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.nbPersonnesMax}
-                </div>
-              )}
-            </div>
-
-            <div className="form-group">
-              <div className="form-check my-2">
-                <input
-                  type="checkbox"
-                  id="animalAccepte"
-                  className="form-check-input"
-                  checked={escapadeFormValues.animalAccepte}
-                  onChange={(e) => {
-                    setEscapadeFormValues({
-                      ...escapadeFormValues,
-                      animalAccepte: e.target.checked,
-                    });
-                  }}
-                />
-                <label className="form-check-label" htmlFor="animalAccepte">
-                  Animaux acceptés
-                </label>
-              </div>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="prix">Prix par jour</label>
-              <input
-                type="number"
-                id="prix"
-                className={`form-control mb-2 ${
-                  escapadeFormErrors.prix ? "is-invalid" : ""
-                }`}
-                placeholder="Entrez le prix par jour de votre escapade"
-                value={escapadeFormValues.prix}
-                onChange={(e) => {
-                  let number = Number(e.target.value.replace(",", "."));
-                  setEscapadeFormValues({
-                    ...escapadeFormValues,
-                    prix: number,
-                  });
-                }}
-                required
-              />
-              {escapadeFormErrors.prix && (
-                <div className="invalid-feedback">
-                  {escapadeFormErrors.prix}
-                </div>
-              )}
-            </div>
-          </form>
-        </div>
-        <hr />
-        <div
-          className="modal-footer my-3 mx-5"
-          style={{ position: "sticky", bottom: 0, zIndex: 1 }}
-        >
-          <button
-            type="submit"
-            className="btn btn-dark my-3 mx-3"
-            onClick={handleFormSubmit}
-          >
-            Soumettre
-          </button>
-          {/* <button
-            type="button"
-            className="btn btn-dark my-3 mx-3"
-            onClick={() => setIsEscapadeOpen(false)}
-          >
-            Fermer
-          </button> */}
-        </div>
-      </Modal>
-    </div>
+        </form>
+      </div>
+    </Modal>
   );
 }
 

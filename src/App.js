@@ -9,6 +9,8 @@ import axios from "axios";
 import { getGeolocation } from "./components/GeolocationComponent";
 import DetailsHebergementModal from "./components/DetailsHebergementModal";
 import PassOublieModal from "./components/PassOublieModal";
+import ReserverModal from "./components/ReserverModal";
+import ConnexionModal from "./components/ConnexionModal";
 
 const App = () => {
   const [isModelVisible, setIsModelVisible] = useState(true);
@@ -21,6 +23,20 @@ const App = () => {
     useState(false);
   const [selectedHebergement, setSelectedHebergement] = useState(null);
   const [isPassOublieOpen, setIsPassOublieOpen] = useState(false);
+  const [isReserverOpen, setIsReserverOpen] = useState(true);
+  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  ////////////////////////////////////////////
+  const [isReserverModalOpen, setIsReserverModalOpen] = useState(true);
+  ////////////////////////////////////////////
+  const [isConnexionModalOpen, setIsConnexionModalOpen] = useState(false);
+
+  const goToReserver = () => {
+    if (isUserLoggedIn) {
+      setIsReserverModalOpen(true);
+    } else {
+      setIsConnexionModalOpen(true);
+    }
+  };
 
   const handleCardClick = (hebergement) => {
     setSelectedHebergement(hebergement);
@@ -64,7 +80,7 @@ const App = () => {
 
   return (
     <div className="app">
-      <Header />
+      <Header onGoToReserver={goToReserver} />
 
       {isModelVisible && (
         <div className="canvas-container">
@@ -139,6 +155,19 @@ const App = () => {
         <DetailsHebergementModal
           hebergement={selectedHebergement}
           onClose={() => setIsDetailsHebergementModalOpen(false)}
+          onGoToReserver={goToReserver}
+        />
+      )}
+      {isReserverModalOpen && (
+        <ReserverModal
+          className="reservationModal"
+          isOpen={isReserverModalOpen}
+          onClose={() => setIsReserverModalOpen(false)}
+          onGoToReserver={() => {
+            setIsDetailsHebergementModalOpen(false);
+            setIsReserverModalOpen(true);
+          }}
+          //onServerMessage={handleServerMessage}
         />
       )}
     </div>

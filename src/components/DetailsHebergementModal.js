@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, props } from "react";
 import Modal from "react-modal";
+import ReserverModal from "./ReserverModal";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { registerLocale, setDefaultLocale } from "react-datepicker";
@@ -8,11 +9,16 @@ registerLocale("fr", fr);
 
 //Modal.setAppElement("#root"); // Remplacez '#root' par l'id de l'élément racine de votre application
 
-function DetailsHebergementModal({ hebergement, onClose }) {
+function DetailsHebergementModal({ hebergement, onClose, onGoToReserver }) {
+  ///////////////////////////////////////////////////////////
+  const [reserverModalOpen, setReserverModalOpen] = useState(true);
+  ///////////////////////////////////////////////////////////
   const handleReserverClick = (event) => {
     event.preventDefault();
-    alert("C'est ici que nous affichons le formulaire de réservation");
-    onClose();
+    //alert("C'est ici que nous affichons le formulaire de réservation");
+
+    setReserverModalOpen(true);
+    onGoToReserver();
   };
 
   // Convertir les dates de réservation en objets Date pour le DatePicker

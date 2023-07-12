@@ -25,7 +25,9 @@ function Header() {
   //const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [isShowMessageModal, setShowMessageModal] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
-
+  ////////////////////////////////////////////////
+  const [isReserverOpen, setIsReserverOpen] = useState(true);
+  ////////////////////////////////////////////////
   useEffect(() => {
     if (serverMessage) {
       // Afficher le modal du message du serveur
@@ -100,6 +102,17 @@ function Header() {
     setServerMessage("Merci d'avoir utilisé Escapade");
     //afficher le modal de succès
     setShowMessageModal(true);
+  };
+
+  const handleReserverClick = () => {
+    if (!isUserLoggedIn) {
+      setIsConnexionOpen(true);
+      setPopupToShow("reserver");
+    }
+  };
+
+  const handleEscapadeModalClose = () => {
+    setIsEscapadeOpen(false);
   };
 
   return (

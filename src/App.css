@@ -215,6 +215,26 @@ header {
   
 }
 
+.reservationModal{
+  position: fixed;
+  /* top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); */
+  
+  max-width: 95%;
+  max-height: 95%;
+  width: fit-content;
+  margin: 0 auto; /* Centrez le modal horizontalement */
+  background-color: rgba(255,255,255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  border-radius: 1rem;
+  
+}
+
 .message-modal{
   position: absolute;
   top: 50%;
