@@ -4,10 +4,12 @@
   "private": true,
   "proxy": "http://localhost:5000",
   "dependencies": {
+    "@cucumber/cucumber": "^9.2.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "argon2": "^0.30.3",
+    "assert": "^2.0.0",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "cors": "^2.8.5",
