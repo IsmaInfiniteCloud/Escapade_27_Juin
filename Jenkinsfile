@@ -4,33 +4,22 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        sh 'npm ci' // Use 'npm ci' for clean installation
-        sh 'npm run build'
+        sh '/home/ubuntu/.nvm/versions/node/v18.16.0/bin/npm ci'
+        sh '/home/ubuntu/.nvm/versions/node/v18.16.0/bin/npm run build'
       }
     }
-
+    
     stage('Test') {
       steps {
-        sh 'npm test' // Run the tests
+        sh '/home/ubuntu/.nvm/versions/node/v18.16.0/bin/npm run test'
       }
     }
 
     stage('Deploy') {
       steps {
-        sh 'npm install -g npm@18.16.0' // Install la bonne version de npm
-        sh 'npm install -g surge' 
-        sh 'surge --project ./build --domain http://localhost:3000' // pour le moment sur le port 3000
+        sh '/home/ubuntu/.nvm/versions/node/v18.16.0/bin/npm install -g surge' // Install Surge for deployment
+        sh '/home/ubuntu/.nvm/versions/node/v18.16.0/bin/surge --project ./build --domain localhost:3000' 
       }
-    }
-  }
-
-  post {
-    success {
-      echo 'Pipeline completed successfully'
-    }
-
-    failure {
-      echo 'Pipeline failed, please check the build and test stages'
     }
   }
 }
