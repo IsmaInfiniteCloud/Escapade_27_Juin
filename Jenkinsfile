@@ -18,14 +18,7 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
-        script {
-          if (fileExists('node_modules/')) {
-            echo 'Dependencies cache hit'
-          } else {
-            echo 'Dependencies cache miss'
-            sh 'npm ci'
-          }
-        }
+        sh 'npm ci'
       }
     }
 
