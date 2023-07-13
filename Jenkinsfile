@@ -13,6 +13,8 @@ pipeline {
         sh 'npm --version'
         // Increase the fetch retry timeout to 20 minutes
         sh 'npm config set fetch-retry-maxtimeout 1200000'
+        // Clear npm cache
+        sh 'npm cache clean --force'
       }
     }
 
