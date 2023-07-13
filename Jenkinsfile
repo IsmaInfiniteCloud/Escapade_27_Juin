@@ -11,8 +11,8 @@ pipeline {
         // Use Node.js v18.16.1 for this stage
         sh 'node --version'
         sh 'npm --version'
-        // Increase the fetch retry timeout to 20 minutes
-        sh 'npm config set fetch-retry-maxtimeout 1200000'
+        // Increase the fetch retry timeout to 50 minutes
+        sh 'npm config set fetch-retry-maxtimeout 3000000'
         // Clear npm cache
         sh 'npm cache clean --force'
       }
@@ -20,7 +20,9 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
-        sh 'npm ci'
+        retry(3) {
+            sh 'npm ci'
+        }
       }
     }
 
