@@ -1,22 +1,38 @@
-import React from "react";
+import React, { useState, props } from "react";
 import Modal from "react-modal";
-import DetailsItem from "./DetailsHerbegementComponents/DetailsItem";
-import Photos from "./DetailsHerbegementComponents/Photo";
-import DatePickerModal from "./DetailsHerbegementComponents/DatePickerModal";
-import ReserveButton from "./DetailsHerbegementComponents/ReserveButton";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min.js";
-import { convertToDateObjects } from "../utils/dateUtils";
+import ReserverModal from "./ReserverModal";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { registerLocale, setDefaultLocale } from "react-datepicker";
+import fr from "date-fns/locale/fr";
+registerLocale("fr", fr);
 
-function DetailsHebergementModal({ hebergement, onClose }) {
+//Modal.setAppElement("#root"); // Remplacez '#root' par l'id de l'élément racine de votre application
+
+function DetailsHebergementModal({ hebergement, onClose, onGoToReserver }) {
+  ///////////////////////////////////////////////////////////
+  const [reserverModalOpen, setReserverModalOpen] = useState(false);
+  ///////////////////////////////////////////////////////////
   const handleReserverClick = (event) => {
     event.preventDefault();
-    alert("C'est ici que nous affichons le formulaire de réservation");
-    onClose();
+    //alert("C'est ici que nous affichons le formulaire de réservation");
+
+    setReserverModalOpen(true);
+    onGoToReserver();
   };
 
   // Convertir les dates de réservation en objets Date pour le DatePicker
-  const datesBloquees = convertToDateObjects(hebergement.date_bloque);
+  // Convertir les dates de réservation en objets Date pour le DatePicker
+  const datesBloquees = hebergement.date_bloque
+    ? hebergement.date_bloque.map((dateString) => new Date(dateString))
+    : [];
+
+  // Vous pouvez également utiliser la fonction highlightDates pour donner un style spécifique aux dates réservées
+  const highlightWithRanges = [
+    {
+      "react-datepicker__day--highlighted-custom-1": datesBloquees,
+    },
+  ];
 
   if (!hebergement) return null;
 
@@ -50,29 +66,80 @@ function DetailsHebergementModal({ hebergement, onClose }) {
         className="modal-body px-5"
         style={{ maxHeight: "65vh", overflowY: "auto" }}
       >
-        <DetailsItem label="Catégorie" value={hebergement.categorie} />
-        <DetailsItem label="Ville" value={hebergement.ville} />
-        <DetailsItem label="Pays" value={hebergement.pays} />
-        <DetailsItem label="Description" value={hebergement.description} />
-        <DetailsItem label="Nombre de chambre" value={hebergement.nbChambres} />
-        <DetailsItem
-          label="Nombre de salle de bain"
-          value={hebergement.nbSallesDeBain}
+        {" "}
+        <p className="py-0">
+          <span className="fw-bold">Catégorie:</span> {hebergement.categorie}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Ville:</span> {hebergement.ville}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Pays:</span> {hebergement.pays}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Description:</span>{" "}
+          {hebergement.description}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Nombre de chambre:</span>{" "}
+          {hebergement.nbChambres}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Nombre de salle de bain:</span>{" "}
+          {hebergement.nbSallesDeBain}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Nombre de personnes maximum:</span>{" "}
+          {hebergement.nbPersonnesMax}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Animaux acceptés:</span>{" "}
+          {hebergement.animalAccepte ? "Oui" : "Non"}
+        </p>
+        <p className="py-0">
+          <span className="fw-bold">Prix:</span> {hebergement.prix} $ / nuit
+        </p>
+        <div className="container px-0 py-3">
+          <div className="row">
+            {hebergement.photos.map((photo, index) => {
+              const imgClass =
+                index === 0
+                  ? "first-photo col-md-6 rounded"
+                  : "subsequent-photo col-md-6 rounded";
+              return (
+                <div key={index} className={imgClass}>
+                  <img
+                    src={photo}
+                    alt={`Photo ${index + 1}`}
+                    className="img-fluid"
+                    style={{ width: "100%" }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+        <h3>Disponibilités</h3>
+        <DatePicker
+          className="highlight-dates-datepicker"
+          inline
+          locale="fr"
+          selected={null}
+          monthsShown={3}
+          highlightDates={highlightWithRanges}
+          excludeDates={datesBloquees}
+          onChangeRaw={(e) => e.preventDefault()}
         />
-        <DetailsItem
-          label="Nombre de personnes maximum"
-          value={hebergement.nbPersonnesMax}
-        />
-        <DetailsItem
-          label="Animaux acceptés"
-          value={hebergement.animalAccepte ? "Oui" : "Non"}
-        />
-        <DetailsItem label="Prix" value={hebergement.prix + " $ / nuit"} />
-        <Photos photos={hebergement.photos} />
-        <DatePickerModal datesBloquees={datesBloquees} />
       </div>
       <hr />
-      <ReserveButton onClick={handleReserverClick} />
+      <button
+        type="button"
+        className="btn btn-dark my-3 mx-5 fw-bold"
+        onClick={handleReserverClick}
+        //onChangeRaw={(e) => e.preventDefault()}
+      >
+        Réserver
+      </button>
     </Modal>
   );
 }
