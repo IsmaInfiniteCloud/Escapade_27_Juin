@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   stages {
-    stage('Build') {
+    stage('Prepare') {
       steps {
         // Install n (Node.js version manager) locally
         sh 'sudo npm install -g n'
@@ -11,9 +11,29 @@ pipeline {
         // Use Node.js v18.16.1 for this stage
         sh 'node --version'
         sh 'npm --version'
-        // Increase the fetch retry timeout to 20 minutes
-        sh 'npm config set fetch-retry-maxtimeout 1200000'
-        sh 'npm ci'
+        // Increase the fetch retry timeout to 50 minutes
+        sh 'npm config set fetch-retry-maxtimeout 3000000'
+        // Clear npm cache
+        sh 'npm cache clean --force'
+      }
+    }
+
+    stage('Install Dependencies') {
+      steps {
+        retry(3) {
+            sh 'npm ci'
+        }
+      }
+    }
+
+    stage('Start Server') {
+      steps {
+        sh 'npm run server'
+      }
+    }
+
+    stage('Build') {
+      steps {
         sh 'npm run build'
       }
     }
