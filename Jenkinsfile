@@ -18,7 +18,14 @@ pipeline {
 
     stage('Install Dependencies') {
       steps {
+        sh 'npm install express express-session mongoose'
         sh 'npm ci'
+      }
+    }
+
+    stage('Start Server') {
+      steps {
+        sh 'npx nodemon server.js'
       }
     }
 
