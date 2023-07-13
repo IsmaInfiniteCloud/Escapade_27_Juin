@@ -94,8 +94,8 @@ exports.getUserByEmail = async (req, res) => {
 };
 exports.patchPassword = async (req, res) => {
   const email = req.body.email;
-  const newPassword = req.body.newPassword;
-  const confirmPassword = req.body.confirmPassword;
+  const newPassword = req.body.motDePasse;
+  const confirmPassword = req.body.repete_passe;
 
   // Check if the new password and confirm password are same
   if (newPassword !== confirmPassword) {
@@ -116,16 +116,16 @@ exports.patchPassword = async (req, res) => {
     const updatedUser = await User.findByIdAndUpdate(user.id, { motDePasse: hashedPassword }, { new: true });
 
     if (!updatedUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Cet utilisateur n'existe pas" });
     }
 
     return res.status(200).json({
-      message: "User password updated successfully",
+      message: "Le mot de passe a été changé avec succès",
       updatedUser,
     });
   } catch (err) {
     return res.status(500).json({
-      message: "Error when updating the user's password",
+      message: "Les informations sont incoherentes",
     });
   }
 };
