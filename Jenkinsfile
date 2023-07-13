@@ -2,7 +2,7 @@ pipeline {
   agent any
 
   stages {
-    stage('Build') {
+    stage('Prepare') {
       steps {
         // Install n (Node.js version manager) locally
         sh 'sudo npm install -g n'
@@ -13,7 +13,24 @@ pipeline {
         sh 'npm --version'
         // Increase the fetch retry timeout to 20 minutes
         sh 'npm config set fetch-retry-maxtimeout 1200000'
-        sh 'npm ci'
+      }
+    }
+
+    stage('Install Dependencies') {
+      steps {
+        script {
+          if (fileExists('node_modules/')) {
+            echo 'Dependencies cache hit'
+          } else {
+            echo 'Dependencies cache miss'
+            sh 'npm ci'
+          }
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
         sh 'npm run build'
       }
     }
