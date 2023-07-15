@@ -20,7 +20,7 @@ function PassOublieModal({
   onGoPassOublie,
 }) {
   const [formValues, setFormValues] = useState({
-    email:"",
+    email: "",
     motDePasse: "",
     repete_passe: "",
   });
@@ -47,9 +47,8 @@ function PassOublieModal({
         "Le mot de passe doit comporter au moins 8 caractères, dont au moins une majuscule, une minuscule, un chiffre et un caractère spécial";
     }
 
-    if(!emailRegex.test(formValues.email)){
-      errors.email = "Veuillez entrer une adresse email valide. "
-
+    if (!emailRegex.test(formValues.email)) {
+      errors.email = "Veuillez entrer une adresse email valide. ";
     }
 
     // Vérification de l'égalité entre le mot de passe et sa répétition
@@ -82,37 +81,22 @@ function PassOublieModal({
       setIsFormValid(true);
       // Envoi des données du formulaire à l'API.
       axios
-        .post("/api/users/patchPassword", formValues)
+        .patch("/api/users/patchPassword", formValues)
         .then((response) => {
           console.log("Réponse du serveur :", response.data);
 
           // Gestion de la réponse de l'API.
-          if (response.status === 201) {
+          if (response.status === 200) {
             resetForm();
             onServerMessage(response.data.message);
-            // Si l'inscription est réussie, fermer le modal.
+            // If the password change is successful, close the modal.
             onClose();
             onGoToConnexion();
           }
         })
         .catch((error) => {
-          // setFormValues({
-          //   prenom: "",
-          //   nom: "",
-          //   email: "",
-          //   motDePasse: "",
-          //   repete_passe: "",
-          // });
           resetForm();
-          if (error.response.status === 400) {
-            onServerMessage(error.response.data.message);
-          } else if (error.response.status === 404) {
-            onServerMessage("Utilisateur non trouvé");
-          } else {
-            onServerMessage(
-              "Une erreur s'est produite. Veuillez réessayer plus tard."
-            );
-          }
+          onServerMessage(error.response.data.message);
           onClose();
         });
     }
@@ -130,50 +114,29 @@ function PassOublieModal({
       <form onSubmit={handleSubmit} className="container w-75 px-0">
         <h2>Nouveau mot de passe</h2>
         <div className="form-group">
+          <label htmlFor="loginEmail">Email</label>
 
-<label htmlFor="loginEmail">Email</label>
+          <input
+            type="email"
+            id="loginEmail"
+            className={`form-control ${formErrors.email ? "is-invalid" : ""}`}
+            placeholder="Entrez votre email"
+            value={formValues.email}
+            default=""
+            onChange={(e) =>
+              setFormValues({
+                ...formValues,
 
-<input
+                email: e.target.value,
+              })
+            }
+            required
+          />
 
-  type="email"
-
-  id="loginEmail"
-
-  className={`form-control ${
-
-    formErrors.email ? "is-invalid" : ""
-
-  }`}
-
-  placeholder="Entrez votre email"
-
-  value={formValues.email}
-
-  default=""
-
-  onChange={(e) =>
-
-    setFormValues({
-
-      ...formValues,
-
-      email: e.target.value,
-
-    })
-
-  }
-
-  required
-
-/>
-
-{formErrors.email && (
-
-  <div className="invalid-feedback">{formErrors.email}</div>
-
-)}
-
-</div>
+          {formErrors.email && (
+            <div className="invalid-feedback">{formErrors.email}</div>
+          )}
+        </div>
         <div className="form-group">
           <label htmlFor="motDePasse">Mot de passe</label>
           <input
