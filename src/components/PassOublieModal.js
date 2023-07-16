@@ -72,11 +72,12 @@ function PassOublieModal({
   };
 
   const handleSubmit = (event) => {
-    event.preventDefault();
+  event.preventDefault();
 
-    const errors = validateForm();
-    setFormErrors(errors);
+  const errors = validateForm();
+  setFormErrors(errors);
 
+<<<<<<< HEAD
     if (Object.keys(errors).length === 0) {
       setIsFormValid(true);
       // Envoi des données du formulaire à l'API.
@@ -97,12 +98,44 @@ function PassOublieModal({
         .catch((error) => {
           resetForm();
           onServerMessage(error.response.data.message);
+=======
+  if (Object.keys(errors).length === 0) {
+    setIsFormValid(true);
+    // Envoi des données du formulaire à l'API.
+    axios
+      .patch("/api/users/patchPassword", formValues)
+      .then((response) => {
+        console.log("Réponse du serveur :", response.data);
+
+        // Gestion de la réponse de l'API.
+        if (response.status === 200) {
+          resetForm();
+          onServerMessage(response.data.message);
+          // If the password change is successful, close the modal.
+>>>>>>> 978c016921462cb58bf240b1645a8df88885c293
           onClose();
-        });
-    }
-  };
+          onGoToConnexion();
+        }
+      })
+      .catch((error) => {
+        resetForm();
+        if (error.response.status === 400) {
+          onServerMessage(error.response.data.message);
+        } else if (error.response.status === 404) {
+          onServerMessage("Utilisateur non trouvé");
+        } else {
+          onServerMessage(
+            "Une erreur s'est produite. Veuillez réessayer plus tard."
+          );
+        }
+        onClose();
+      });
+  }
+};
+
 
   return (
+    
     <Modal
       isOpen={isOpen}
       onRequestClose={() => {

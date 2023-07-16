@@ -8,5 +8,6 @@ router.post("/signup", userController.signUp);
 router.post("/signin", userController.signIn);
 router.post("/logout", userController.logout);
 router.patch("/patchPassword", userController.patchPassword);
+router.patch("/patchEmail", userController.patchEmail);
 
 module.exports = router;

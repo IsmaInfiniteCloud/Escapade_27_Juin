@@ -93,47 +93,34 @@ exports.getUserByEmail = async (req, res) => {
     });
   }
 };
-exports.patchPassword = async (req, res) => {
-  const email = req.body.email;
-  const newPassword = req.body.motDePasse;
-  const confirmPassword = req.body.repete_passe;
 
-  // Check if the new password and confirm password are same
-  if (newPassword !== confirmPassword) {
-    return res
-      .status(400)
-      .json({ message: "Les mots de passe ne correspondent pas" });
+exports.patchEmail = async (req, res) => {
+  const id = req.params.id;
+  const newEmail = req.body.email;
+
+  // Vérifier si l'email est déjà utilisé
+  const emailExists = await User.findOne({ email: newEmail });
+  if (emailExists) {
+    return res.status(400).json({ message: "Cet email est déjà utilisé" });
   }
 
-  try {
-    // Check for the user with the given email
-    const user = await User.findOne({ email: email });
-
-    if (!user) {
-      return res.status(404).json({ message: "Identifiant inexistant" });
+  User.findByIdAndUpdate(
+    id,
+    { email: newEmail },
+    { new: true },
+    (err, user) => {
+      if (err) {
+        return res.status(500).json({
+          message: "Erreur lors de la mise à jour de l'email de l'utilisateur",
+        });
+      }
+      if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+      }
+      return res.status(200).json({
+        message: "Email de l'utilisateur mis à jour avec succès",
+        user,
+      });
     }
-
-    // If the user is found, hash the new password and update it
-    const hashedPassword = await argon2.hash(newPassword);
-
-    const updatedUser = await User.findByIdAndUpdate(
-      user.id,
-      { motDePasse: hashedPassword },
-      { new: true }
-    );
-
-    if (!updatedUser) {
-      return res.status(404).json({ message: "Identifiant inexistant" });
-    }
-
-    return res.status(200).json({
-      message: "Le mot de passe a été mis à jour avec succès",
-      updatedUser,
-    });
-  } catch (err) {
-    return res.status(500).json({
-      message:
-        "Une erreur s'est produite lors de la mise à jour du mot de passe",
-    });
-  }
+  );
 };
