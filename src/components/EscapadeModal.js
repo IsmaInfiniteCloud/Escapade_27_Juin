@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
-import DateSelection from './EscapadeModalComponent/DatePickerField';
-import PhotoSelection from './EscapadeModalComponents/PhotoPreview';
+import DatePickerModal from './DetailsHerbegementComponents/DatePickerModal';
+import PhotosModal from './DetailsHerbegementComponents/PhotosModal';
 import EscapadeForm from './forms/EscapadeForm';
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";

@@ -1,238 +1,124 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { getCoordinates } from '../../utils/geocoding';
-import DatePickerField from '../EscapadeModalComponents/DatePickerField';
-import PhotoPreview from '../EscapadeModalComponents/PhotoPreview';
 import { createEscapade } from '../../utils/api';
 import { validateEscapadeForm } from '../../utils/validation';
-export default function EscapadeForm({
-  isUserId,
-  onServerMessage,
-  onClose,
-}) {
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [isEscapadeOpen, setIsEscapadeOpen] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [selectedPhotos, setSelectedPhotos] = useState([]);
-  const [blockedDates, setBlockedDates] = useState([]);
+import DatePickerModal from '../DetailsHerbegementComponents/DatePickerModal';
+import PhotosModal from '../DetailsHerbegementComponents/PhotosModal';
+
+
+function EscapadeForm() {
   const [escapadeFormValues, setEscapadeFormValues] = useState({
-    idUser: isUserId,
     titre: "",
     description: "",
-    categorie: "Chalet",
-    adresse: "",
-    ville: "",
-    codepostal: "",
     pays: "",
+    ville: "",
+    adresse: "",
+    codepostal: "",
+    prix: "",
     nbChambres: "",
     nbSallesDeBain: "",
     nbPersonnesMax: "",
-    animalAccepte: false,
-    photos: "",
-    prix: "",
+    photos: [],
+    datesBloquees: [],
   });
-  const [isEscapadeFormValid, setIsEscapadeFormValid] = useState(false);
+
   const [escapadeFormErrors, setEscapadeFormErrors] = useState({});
 
-  const resetForm = () => {
-    setEscapadeFormValues({
-      idUser: isUserId,
-      titre: "",
-      description: "",
-      categorie: "Chalet",
-      adresse: "",
-      ville: "",
-      codepostal: "",
-      pays: "",
-      nbChambres: "",
-      nbSallesDeBain: "",
-      nbPersonnesMax: "",
-      animalAccepte: false,
-      photos: "",
-      prix: "",
-    });
-    setEscapadeFormErrors({});
-  };
-
-  const handleFormInputChange = (event) => {
-    setEscapadeFormValues({
-      ...escapadeFormValues,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-  const handleCheckboxChange = (event) => {
-    setEscapadeFormValues({
-      ...escapadeFormValues,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const handleEscapadeSubmit = async (event) => {
+  const handleEscapadeSubmit = (event) => {
     event.preventDefault();
-  
-    const errors = validateEscapadeForm(
-      escapadeFormValues,
-      selectedPhotos,
-      resetForm
-    );
-  
+    const errors = validateEscapadeForm(escapadeFormValues, escapadeFormValues.photos);
+
     if (Object.keys(errors).length === 0) {
-      const coordinates = await getCoordinates(
-        escapadeFormValues.adresse,
-        escapadeFormValues.ville,
-        escapadeFormValues.codepostal,
-        escapadeFormValues.pays
-      );
-  
-      const escapadeData = {
-        ...escapadeFormValues,
-        idUser: isUserId,
-        nbChambres: parseInt(escapadeFormValues.nbChambres),
-        nbSallesDeBain: parseFloat(escapadeFormValues.nbSallesDeBain),
-        nbPersonnesMax: parseInt(escapadeFormValues.nbPersonnesMax),
-        photos: selectedPhotos,
-        date_bloque: blockedDates,
-        prix: parseFloat(escapadeFormValues.prix),
-        location: {
-          type: "Point",
-          coordinates: [coordinates.lng, coordinates.lat],
-        },
-      };
-  
-      createEscapade(escapadeData)
-        .then((response) => {
-          resetForm();
-          onServerMessage(response.data.message);
-          setSelectedFiles([]);
-          setSelectedPhotos([]);
-          onClose();
-        })
-        .catch((error) => {
-          resetForm();
-          setSelectedFiles([]);
-          setSelectedPhotos([]);
-          onServerMessage(
-            "Une erreur s'est produite. Veuillez réessayer plus tard."
-          );
-          onClose();
-        });
+      // handle submit here
     } else {
       setEscapadeFormErrors(errors);
     }
   };
 
+  const handleFileChange = (event) => {
+    setEscapadeFormValues({
+      ...escapadeFormValues,
+      photos: Array.from(event.target.files),
+    });
+  };
 
   return (
-    <form onSubmit={handleEscapadeSubmit}>
-      <input
-        type="text"
-        name="titre"
-        value={escapadeFormValues.titre}
-        onChange={handleFormInputChange}
-        placeholder="Title"
-      />
-      <textarea
-        name="description"
-        value={escapadeFormValues.description}
-        onChange={handleFormInputChange}
-        placeholder="Description"
-      />
-      <input
-        type="text"
-        name="categorie"
-        value={escapadeFormValues.categorie}
-        onChange={handleFormInputChange}
-        placeholder="Category"
-      />
-      <input
-        type="text"
-        name="adresse"
-        value={escapadeFormValues.adresse}
-        onChange={handleFormInputChange}
-        placeholder="Address"
-      />
-      <input
-        type="text"
-        name="ville"
-        value={escapadeFormValues.ville}
-        onChange={handleFormInputChange}
-        placeholder="City"
-      />
-      <input
-        type="text"
-        name="codepostal"
-        value={escapadeFormValues.codepostal}
-        onChange={handleFormInputChange}
-        placeholder="Postal Code"
-      />
-      <input
-        type="text"
-        name="pays"
-        value={escapadeFormValues.pays}
-        onChange={handleFormInputChange}
-        placeholder="Country"
-      />
-      <input
-        type="text"
-        name="nbChambres"
-        value={escapadeFormValues.nbChambres}
-        onChange={handleFormInputChange}
-        placeholder="Number of Bedrooms"
-      />
-      <input
-        type="text"
-        name="nbSallesDeBain"
-        value={escapadeFormValues.nbSallesDeBain}
-        onChange={handleFormInputChange}
-        placeholder="Number of Bathrooms"
-      />
-      <input
-        type="text"
-        name="nbPersonnesMax"
-        value={escapadeFormValues.nbPersonnesMax}
-        onChange={handleFormInputChange}
-        placeholder="Max Number of People"
-      />
-      <input
-        type="checkbox"
-        name="animalAccepte"
-        checked={escapadeFormValues.animalAccepte}
-        onChange={handleCheckboxChange}
-      />
-      <label htmlFor="animalAccepte">Are animals accepted?</label>
-      <input
-        type="text"
-        name="photos"
-        value={escapadeFormValues.photos}
-        onChange={handleFormInputChange}
-        placeholder="Photos"
-      />
-      <input
-        type="text"
-        name="prix"
-        value={escapadeFormValues.prix}
-        onChange={handleFormInputChange}
-        placeholder="Price"
-      />
-      <DatePickerField
-        selectedDates={selectedDates}
-        setSelectedDates={setSelectedDates}
-        blockedDates={blockedDates}
-        setBlockedDates={setBlockedDates}
-      />
-      <PhotoPreview
-        selectedFiles={selectedFiles}
-        setSelectedFiles={setSelectedFiles}
-        selectedPhotos={selectedPhotos}
-        setSelectedPhotos={setSelectedPhotos}
-        escapadeFormErrors={escapadeFormErrors}
-        setEscapadeFormErrors={setEscapadeFormErrors}
-      />
-      <button type="submit">Submit</button>
+    <form onSubmit={handleEscapadeSubmit} className="container px-5">
+      <div className="mb-3">
+        <label htmlFor="titre" className="form-label">
+          Titre
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="titre"
+          value={escapadeFormValues.titre}
+          onChange={(e) =>
+            setEscapadeFormValues({
+              ...escapadeFormValues,
+              titre: e.target.value,
+            })
+          }
+        />
+        {escapadeFormErrors.titre && (
+          <div className="text-danger">{escapadeFormErrors.titre}</div>
+        )}
+      </div>
+
+      {/* ... Repeat this pattern for all the fields ... */}
+
+      <div className="mb-3">
+        <label htmlFor="nbPersonnesMax" className="form-label">
+          Nombre de personnes max
+        </label>
+        <input
+          type="text"
+          className="form-control"
+          id="nbPersonnesMax"
+          value={escapadeFormValues.nbPersonnesMax}
+          onChange={(e) =>
+            setEscapadeFormValues({
+              ...escapadeFormValues,
+              nbPersonnesMax: e.target.value,
+            })
+          }
+        />
+        {escapadeFormErrors.nbPersonnesMax && (
+          <div className="text-danger">{escapadeFormErrors.nbPersonnesMax}</div>
+        )}
+      </div>
+
+      <div className="mb-3">
+        <label htmlFor="photos" className="form-label">
+          Photos
+        </label>
+        <input
+          type="file"
+          className="form-control"
+          id="photos"
+          multiple
+          onChange={handleFileChange}
+        />
+        {escapadeFormErrors.photos && (
+          <div className="text-danger">{escapadeFormErrors.photos}</div>
+        )}
+        {escapadeFormValues.photos.length > 0 && <PhotosModal photos={escapadeFormValues.photos} />}
+      </div>
+
+      <div className="mb-3">
+        <label className="form-label">
+          Dates bloquées
+        </label>
+        <DatePickerModal datesBloquees={escapadeFormValues.datesBloquees} />
+      </div>
+
+      <button type="submit" className="btn btn-primary">
+        Submit
+      </button>
     </form>
   );
-
 }
+
+export default EscapadeForm;

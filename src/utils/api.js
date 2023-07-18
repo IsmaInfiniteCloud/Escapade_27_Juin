@@ -6,5 +6,5 @@ export function loginUser(loginData) {
 
 
 export function createEscapade(escapadeData) {
-  return axios.post("/api/escapade", escapadeData);
+  return axios.post("/api/hebergement", escapadeData);
 }

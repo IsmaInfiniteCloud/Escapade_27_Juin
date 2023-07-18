@@ -1,4 +1,9 @@
-function Photos({ photos }) {
+// PhotosComponent.js
+
+function PhotosModal({ photos }) {
+  if (!photos || photos.length === 0) {
+    return <div>No photos available</div>
+}
     return (
       <div className="container px-0 py-3">
         <div className="row">
@@ -23,4 +28,5 @@ function Photos({ photos }) {
     );
   }
   
-  export default Photos;
+  export default PhotosModal;
+  

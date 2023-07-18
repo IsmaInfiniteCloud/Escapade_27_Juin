@@ -1,11 +1,13 @@
+// DatePickerComponent.js
+
 import DatePicker from "react-datepicker";
 
 function DatePickerModal({ datesBloquees }) {
-  const highlightWithRanges = [
+  const highlightWithRanges = datesBloquees ? [
     {
       "react-datepicker__day--highlighted-custom-1": datesBloquees,
     },
-  ];
+  ] : [];
 
   return (
     <>

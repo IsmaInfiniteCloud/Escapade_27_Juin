@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "react-modal";
 import DetailsItem from "./DetailsHerbegementComponents/DetailsItem"
-import Photos from "./DetailsHerbegementComponents/Photo"
+import Photos from "./DetailsHerbegementComponents/PhotosModal"
 import DatePickerModal from "./DetailsHerbegementComponents/DatePickerModal";
 import ReserveButton from "./DetailsHerbegementComponents/ReserveButton";
 import "bootstrap/dist/css/bootstrap.min.css";
