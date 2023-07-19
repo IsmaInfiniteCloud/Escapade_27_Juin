@@ -438,7 +438,151 @@ width: 100%;
 }
 
 
+.logo-container {
+    display: flex;
+    justify-content: center;
+}
+ 
+.hebergementsAll {
+    width: 75%;
+    color: white;
+    margin-top: 5rem;
+    margin-bottom: 5rem;
+}
+
+.hebergementsAll__container {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
+
+.hebergementsAll__container__item {
+    margin-bottom: 3rem;
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 8px rgba(232, 9, 9, 0.1); /* Initial shadow */
+  border: 5px solid #8ed1f5 !important; /* Yellow border for image */
+  overflow: hidden ;
+  border-radius: 5px;
+}
+
+.card:hover {
+  transform: translateY(-5px); /* Hover lift effect */
+  box-shadow: 0 8px 16px rgba(242, 226, 103, 0.6); /* Enhanced shadow on hover */
+}
+
+.card-image-wrapper {
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  position: relative;
+}
+
+.card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  height: 195px !important; 
+  object-fit: cover;
+
+}
+
+.card-text {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  
+}
+
+.text-red {
+  font-weight: bold;
+  color: #dc8c13; /* Adjusted color for better readability */
+  text-align: right;
+  font-size: x-large;
+}
+
+.logo-container {
+  display: flex;
+  justify-content: center;
+}
+
+.hebergementsAll {
+  width: 75%;
+  color: white;
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+}
+
+.hebergementsAll__container {
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+}
+
+.hebergementsAll__container__item {
+  margin-bottom: 3rem;
+  border: #08657e;
+}
 
 
 
+/*drapeau de pays */
 
+.flag-icon {
+  width: 20px;
+  height: auto;
+  margin-right: 5px; 
+  vertical-align: middle; /* Aline l'icône avec le texte */
+}
+/*animate cards */
+
+@keyframes slideFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+    to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.hebergementsAll__container__item {
+  /* Other styles you might have */
+  opacity: 0; /* Initialize with an opacity of 0 */
+  animation: slideFromLeft 0.8s forwards; /* apply the animation */
+}
+
+
+.text-center {
+  text-align: center;
+}
+/* effet pour le titre escapade populaire*/
+.escapades-title {
+  margin-bottom: 30px;  
+  font-size: 45px;;
+  animation: fadeInUp 0.8s both ease-in-out;  
+}
+
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.escapades-title:hover{
+  color:yellow;
+}
+
+@media (max-width: 768px) {
+  .card-title {
+      font-size: 1.2rem;
+  }
+}
+.card-image {
+  max-width: 100%;
+  height: auto;
+}
