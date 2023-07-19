@@ -18,6 +18,9 @@ The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
 ### `npm test` 
+make sure you have Jest installed in your project. If you haven't installed it yet, you can do so by running :
+npm install jest --save-dev
+
 
 ### `npm run build`
 
