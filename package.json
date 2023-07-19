@@ -33,7 +33,7 @@
     "start": "react-scripts start",
     "server": "nodemon server.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --env=jsdom tests",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
