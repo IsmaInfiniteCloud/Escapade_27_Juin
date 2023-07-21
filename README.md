@@ -1,41 +1,118 @@
-# Getting Started with React App
 
-## Available Scripts
+#Getting Started with Escapade React App
+#Available Scripts
+When you first pull from GitHub, the required npm packages may not follow. To ensure they're installed, run the following:
 
-Les npm ne semble pas suivre lors du premier pull sur gitHub donc:
-npm install express
-npm install express-session
-npm install mongoose
+================================================================================================
+npm install express express-session mongoose
+================================================================================================
+To test the app, you'll need two separate terminals:
 
-Pour tester l'app il faudra 2 terminaux differents
-Pour le serveur : 'nodemon server.js'
-pour react : 'npm run start'
+#For the server:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+================================================================================================
+nodemon server.js
+================================================================================================
+#For the React app:
 
-### `npm test` 
-make sure you have Jest installed in your project. If you haven't installed it yet, you can do so by running :
+
+================================================================================================
+npm run start
+================================================================================================
+This will run the app in development mode. Open http://localhost:3000 to view it in your browser. The app will automatically reload if you make changes. You'll also be notified of linting errors in the console.
+
+================================================================================================
+npm test
+================================================================================================
+To run tests, first ensure Jest is installed in your project. If you haven't installed it yet:
+
+markdown
+Copy code
+================================================================================================
 npm install jest --save-dev
+npm run build
+================================================================================================
+This builds the app for production in the build folder, bundling React in production mode and optimizing for the best performance. The build is minified, and filenames include hashes.
 
+================================================================================================
+npm run eject
+================================================================================================
+Prerequisites:
 
-### `npm run build`
+Before you start, make sure the following are installed:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Node.js (version 8 or 10):
 
-The build is minified and the filenames include the hashes.\ 
+================================================================================================
+brew install node
+================================================================================================
+npm (Installed alongside Node.js)
 
-### `npm run eject`
+#selenium-side-runner:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
  
+================================================================================================
+npm install -g selenium-side-runner
+================================================================================================
+#Browser Specific Drivers:
+
+Depending on the browser you wish to use, you'll need to install the corresponding driver:
+
+#Chrome:
+
+
+================================================================================================
+npm install -g chromedriver
+================================================================================================
+#Microsoft Edge (Windows only):
+
+
+================================================================================================
+npm install -g edgedriver
+================================================================================================
+#Firefox:
+
+
+================================================================================================
+npm install -g geckodriver
+================================================================================================
+#Internet Explorer (Windows only):
+
+
+================================================================================================
+npm install -g iedriver
+================================================================================================
+⚠️ Note: IEDriver might require additional setup. More details available in the official documentation.
+
+Safari:
+SafariDriver is bundled with macOS.
+
+Launching Selenium Runner:
+
+After installing the prerequisites, you can run your tests:
+
+
+================================================================================================
+selenium-side-runner /path/to/your-project.side
+================================================================================================
+For multiple .side files, use:
+
+
+================================================================================================
+selenium-side-runner /path/to/*.side
+================================================================================================
+This command runs your tests in parallel across different browser windows, distributed over your machine's available CPU cores.
+
+Running Tests on Different Browsers Locally:
+
+To specify a different browser for local test execution:
+
+
+================================================================================================
+selenium-side-runner -c "browserName=chrome"
+selenium-side-runner -c "browserName='internet explorer'"
+selenium-side-runner -c "browserName=edge"
+selenium-side-runner -c "browserName=firefox"
+selenium-side-runner -c "browserName=safari"
+================================================================================================
