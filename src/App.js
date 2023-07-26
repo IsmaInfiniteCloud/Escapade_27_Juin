@@ -17,6 +17,7 @@ function getCountryCode(countryName) {
   }
   return "default";
 }
+
 const App = () => {
   const [isModelVisible, setIsModelVisible] = useState(true);
   const [isLogoVisible, setIsLogoVisible] = useState(false);
@@ -26,6 +27,7 @@ const App = () => {
   const [isDetailsHebergementModalOpen, setIsDetailsHebergementModalOpen] =
     useState(false);
   const [selectedHebergement, setSelectedHebergement] = useState(null);
+  const [sliceLength, setSliceLength] = useState(30);
 
   const handleCardClick = (hebergement) => {
     setSelectedHebergement(hebergement);
@@ -52,7 +54,7 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get("/api/hebergement/all", { params: { limit: 9 } })
+      .get("/api/hebergement/all", { params: { limit: 36 } })
       .then((response) => {
         setHebergementsAll(response.data);
       })
@@ -60,6 +62,25 @@ const App = () => {
         alert("error :" + error);
         console.error(error);
       });
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 600) {
+        setSliceLength(20);
+      } else if (width < 900) {
+        setSliceLength(25);
+      } else {
+        setSliceLength(30);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   return (
@@ -83,7 +104,7 @@ const App = () => {
       )}
 
       {isLogo2Visible && (
-        <div className="logo-container">
+        <div className="d-flex justify-content-center">
           <img src={logo2} alt="Logo 2" className="logoFull" />
         </div>
       )}
@@ -98,31 +119,47 @@ const App = () => {
             {hebergementsAll.map((hebergement, index) => {
               const countryCode = getCountryCode(
                 hebergement.pays.toLowerCase()
-              ); // Use the function here.
+              );
+
               return (
                 <div
-                  className="hebergementsAll__container__item col-sm-6 col-md-4"
+                  className="hebergementsAll__container__item col-sm-6 col-md-4 align-items-center justify-content-center"
                   key={index}
                 >
                   <div
-                    className="card"
+                    className="card h-100 my-1"
                     onClick={() => handleCardClick(hebergement)}
                   >
-                    <div className="card-image-wrapper">
+                    <div
+                      className="card-image-wrapper "
+                      style={{
+                        paddingBottom: "56.25%" /* 16:9 aspect ratio */,
+                        position: "relative",
+                        height: 0,
+                      }}
+                    >
                       <img
                         className="card-image"
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
                         src={hebergement.photos[0]}
                         alt={hebergement.titre}
                       />
                     </div>
-                    <div className="card-body pt-0">
+                    <div className="card-body">
                       <h5 className="card-title">
-                        {hebergement.titre.length > 30
-                          ? hebergement.titre.slice(0, 30) + "..."
+                        {hebergement.titre.length > sliceLength
+                          ? hebergement.titre.slice(0, sliceLength) + "..."
                           : hebergement.titre}
                       </h5>
                       <p className="card-text">{hebergement.categorie}</p>
-                      <p className="card-text">
+                      <p className="card-text pb-4">
                         <img
                           src={`/flags/${getCountryCode(hebergement.pays)}.png`}
                           alt={hebergement.pays}
@@ -130,7 +167,7 @@ const App = () => {
                         />
                         {hebergement.pays}
                       </p>
-                      <p className="card-text text-red">
+                      <p className="card-text text-red card-text-responsive py-2 pe-3">
                         {hebergement.prix} $CAD/nuit
                       </p>
                     </div>

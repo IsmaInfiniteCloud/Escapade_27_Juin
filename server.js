@@ -9,7 +9,7 @@ const reservationRoutes = require("./routes/reservationRoutes");
 const bodyParser = require("body-parser");
 
 const app = express();
-const port = 5000;
+const port = 5001;
 
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
