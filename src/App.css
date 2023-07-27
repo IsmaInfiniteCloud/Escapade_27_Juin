@@ -7,6 +7,10 @@
   
 }
 
+.container{
+  max-width: 98%;
+}
+
 body {
   overflow-x: hidden;
 }
@@ -55,6 +59,15 @@ body {
   display: none;
 }
 
+.partez {
+  font-size: 1rem;
+  height: 3.25rem;
+  width: 15rem;
+  background-color: #ffffff;
+  color: black;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
 /* Canvas {
   position: relative;
   top: 43%;
@@ -74,12 +87,15 @@ body {
 }
 
 .logoFull{
-  width: 13%;
+  position:relative;
+  width: 25vh;
   margin-top: 10vh;
   margin-left: auto;
   margin-right: auto;
   animation: fadeInDown 0.8s both ease-in-out; 
 }
+
+
 
 .logoPetit{
   width: 30%;
@@ -107,9 +123,10 @@ body {
 header {
   position: fixed;
   background-color: #ffffff;
+  
   border-bottom: 1px solid #000000;
-  min-height: 5vh;
-  max-height: 15vh;
+  min-height: 8vh;
+  
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
@@ -146,14 +163,15 @@ header {
   text-align: end;
   top: 0vh;
   right: 0;
-  height: 5vh;
-  margin: 10px;
+  height: 2em;
+  /* margin: 10px; */
   background-color: #ffffff;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 .recherche{
+  
   background-color: #ffffff;
   border-radius: 20px;
   box-shadow: 0 0 10px rgba(0,0,0,0.2);
@@ -161,7 +179,10 @@ header {
 
 
 
+
+
 .menuDroit{
+  
   height: 7vh;
 }
 
@@ -354,16 +375,18 @@ width: 100%;
   background-color: #b4b4b4;
 }
 
-.globe:hover{
+.globe:hover, .partez:hover{
   background-color: #b4b4b4;
   color: black;
   box-shadow: 0 0 10px rgba(0,0,0,0.3);
 }
 
 .globe{
-  font-size: 1.5rem;
+  font-size: 1rem;
+  height: 3.25rem;
   background-color: #ffffff;
   color: black;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
 .first-photo {
@@ -457,7 +480,7 @@ width: 100%;
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 4px 8px rgba(232, 9, 9, 0.1); /* Initial shadow */
-  border: 3px solid #dc8c13 !important; /* Yellow border for image */
+  border: 3px solid rgb(220, 140, 19) !important; /* Yellow border for image */
   height: fit-content;
   border-radius: 5px;
   max-width: 97%;
@@ -465,7 +488,7 @@ width: 100%;
 
 .card:hover {
   transform: translateY(-5px); /* Hover lift effect */
-  box-shadow: 0 8px 16px #dc8c13; /* Enhanced shadow on hover */
+  box-shadow: 3px 8px 16px rgba(221, 140, 19, 0.75); /* Enhanced shadow on hover */
 }
 
 .card-image-wrapper {
@@ -592,6 +615,21 @@ width: 100%;
       font-size: 1.2rem;
       
   }
+  .escapades-title{
+    font-size: 2rem;
+  }
+
+  .responsive{
+    font-size: 3rem;
+  }
+
+
+}
+
+@media (max-width: 1200px) {
+  .responsive{
+    font-size: 4rem;
+  }
 }
 
 .card-body {
@@ -604,8 +642,6 @@ width: 100%;
   right: 0;
   font-size: calc( .25vw * 3vh);
 }
-
-
 
 
 /* .card-image {

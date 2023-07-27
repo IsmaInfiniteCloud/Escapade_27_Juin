@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaGlobe } from "react-icons/fa";
 import { BiSearch, BiUser, BiMenu } from "react-icons/bi";
+import { BsFillPersonFill } from "react-icons/bs";
 import logo from "../images/escapade.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
@@ -103,115 +104,119 @@ function Header() {
   return (
     <div>
       <header className="header container-fluid">
-        <div className="container-fluid">
-          <div className="container">
-            <div className="row align-items-center">
-              <div className="col-md-4">
-                {/* Logo */}
-                <img src={logo} alt="Logo" className="logoPetit" />
-              </div>
-              <div className="recherche col-md-4 border border-lightgrey rounded my-2">
-                {/* Champ de recherche */}
-                <div className="input-group ">
-                  <input
-                    type="text"
-                    placeholder="Rechercher une destination"
-                    className="form-control  border border-white rounded-pill"
-                  />
-                  <div className="input-group-append">
-                    <button
-                      className="btn btn-dark rounded-circle ms-2 fw-bold my-2 align-items-center justify-content-center "
-                      type="button"
-                    >
-                      <BiSearch />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div className="col-md-4 menuDroit d-flex justify-content-end">
-                {/* Lien "Partez une Escapade" */}
-                <button
-                  onClick={handleEscapadeClick}
-                  className="btn btn-white text-black"
-                >
-                  Partez une Escapade
-                </button>
-
-                {/* Bouton pour changer la langue */}
-                <button
-                  className="globe my-2 pb-2 px-3 border-0 rounded"
-                  // onClick={handleLanguageClick}
-                >
-                  <FaGlobe />
-                </button>
-
-                {/* Bouton pour se connecter/loguer */}
-                <div className="dropdown">
+        <div className="container">
+          <div className="row align-items-center justify-centent-center py-2">
+            <div className="col-xl-4 col-lg-12 col-md-12  ps-0 d-none d-xl-block">
+              {/* Logo */}
+              <img src={logo} alt="Logo" className="logoPetit" />
+            </div>
+            <div className="recherche col-xl-4 col-lg-12 col-md-12  border border-lightgrey rounded my-2 px-2 ">
+              {/* Champ de recherche */}
+              <div className="input-group">
+                <input
+                  type="text"
+                  placeholder="Rechercher une destination"
+                  className="form-control  border border-white rounded-pill"
+                />
+                <div className="input-group-append">
                   <button
-                    className="btn text-decoration-none text-dark dropdown-toggle pb-3 pt-2"
+                    className="btn btn-dark rounded-circle ms-2 fw-bold my-2 align-items-center justify-content-center "
                     type="button"
-                    id="loginDropdown"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
                   >
-                    {/* <span className={`me-2`}> */}
-                    <span
-                      className={`me-2 ${isUserLoggedIn ? "red-icon" : ""}`}
-                    >
-                      <BiMenu />
-                    </span>
-                    {/* <span> */}
-                    <span className={`${isUserLoggedIn ? "red-icon" : ""}`}>
-                      <BiUser />
-                    </span>
+                    <BiSearch />
                   </button>
-                  <ul className="dropdown-menu" aria-labelledby="loginDropdown">
-                    {isUserLoggedIn ? (
-                      <>
-                        <li>
-                          <a
-                            href="#"
-                            className="dropdown-item"
-
-                            // onClick={handleAccountManagementClick}
-                          >
-                            Gérer mon compte
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            className="dropdown-item"
-                            onClick={handleLogout}
-                          >
-                            Déconnexion
-                          </a>
-                        </li>
-                      </>
-                    ) : (
-                      <>
-                        <li>
-                          <a
-                            href="#"
-                            className="dropdown-item inscription-link"
-                            onClick={handleInscriptionClick}
-                          >
-                            Inscription
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            className="dropdown-item"
-                            onClick={handleLoginClick}
-                          >
-                            Connexion
-                          </a>
-                        </li>
-                      </>
-                    )}
-                  </ul>
                 </div>
+              </div>
+            </div>
+            <div className="col-xl-4 col-lg-12 col-md-12 mx-0 menuDroit my-2 px-0 d-flex align-items-center justify-content-center">
+              {/* Lien "Partez une Escapade" */}
+              <button
+                onClick={handleEscapadeClick}
+                className="partez mx-0 my-2 mt-2 py-2 px-1 border-0 rounded justify-content-center"
+              >
+                Partez une Escapade
+              </button>
+
+              {/* Bouton pour changer la langue */}
+              <button
+                className="globe my-2 mx-2 pb-2 px-3 border-0 rounded fs-4"
+                // onClick={handleLanguageClick}
+              >
+                <FaGlobe />
+              </button>
+
+              {/* Bouton pour se connecter/loguer */}
+              <div className="globe dropdown my-2">
+                <button
+                  className="btn text-decoration-none text-dark dropdown-toggle my-0 py-0"
+                  type="button"
+                  id="loginDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  {/* <span className={`me-2`}> */}
+                  <span
+                    className={`me-2 my-3 fs-3 py-2 ${
+                      isUserLoggedIn ? "red-icon" : ""
+                    }`}
+                  >
+                    <BiMenu />
+                  </span>
+                  {/* <span> */}
+                  <span
+                    className={`my-3 fs-3 py-2 ${
+                      isUserLoggedIn ? "red-icon" : ""
+                    }`}
+                  >
+                    <BsFillPersonFill />
+                  </span>
+                </button>
+                <ul className="dropdown-menu" aria-labelledby="loginDropdown">
+                  {isUserLoggedIn ? (
+                    <>
+                      <li>
+                        <a
+                          href="#"
+                          className="dropdown-item"
+
+                          // onClick={handleAccountManagementClick}
+                        >
+                          Gérer mon compte
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="dropdown-item"
+                          onClick={handleLogout}
+                        >
+                          Déconnexion
+                        </a>
+                      </li>
+                    </>
+                  ) : (
+                    <>
+                      <li>
+                        <a
+                          href="#"
+                          className="dropdown-item inscription-link"
+                          onClick={handleInscriptionClick}
+                        >
+                          Inscription
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="#"
+                          className="dropdown-item"
+                          onClick={handleLoginClick}
+                        >
+                          Connexion
+                        </a>
+                      </li>
+                    </>
+                  )}
+                </ul>
               </div>
             </div>
           </div>

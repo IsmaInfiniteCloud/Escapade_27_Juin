@@ -103,6 +103,8 @@ const App = () => {
         </div>
       )}
 
+      <div className="responsive">&nbsp;</div>
+
       {isLogo2Visible && (
         <div className="d-flex justify-content-center">
           <img src={logo2} alt="Logo 2" className="logoFull" />
@@ -167,7 +169,7 @@ const App = () => {
                         />
                         {hebergement.pays}
                       </p>
-                      <p className="card-text text-red card-text-responsive py-2 pe-3">
+                      <p className="card-text text-red card-text-responsive py-2 pe-2">
                         {hebergement.prix} $CAD/nuit
                       </p>
                     </div>
